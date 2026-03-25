@@ -1,0 +1,2678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MizoMinute · Aizawl — dual slider · working search · product tags</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- =============================================== -->
+    <!-- ✅ EMAILJS REMOVED - REPLACED WITH BACKEND NODEMAILER -->
+    <!-- =============================================== -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f7f7fc;
+            color: #1e1e2f;
+        }
+
+        .top-header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 0.6rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ff6f2f20;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-login {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f0f2f5;
+            padding: 5px 15px 5px 8px;
+            border-radius: 40px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
+        .profile-pic {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ff6f2f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-name {
+            font-weight: 500;
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .profile-dropdown {
+            position: relative;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            z-index: 1;
+            top: 50px;
+            left: 0;
+            border: 1px solid #eee;
+        }
+        .dropdown-content a {
+            color: #1e1e2f;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        .dropdown-content a i {
+            width: 24px;
+            color: #ff6f2f;
+        }
+        .dropdown-content a:hover {
+            background: #fff0e8;
+        }
+        .profile-dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Cart icon - smaller Blinkit style */
+        .cart-icon {
+            background: #ffc107;
+            color: #1e1e2f;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            border: none;
+            position: relative;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+            z-index: 101;
+        }
+        .cart-count {
+            background: #ff6f2f;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-weight: bold;
+        }
+        .cart-text {
+            font-size: 0.75rem;
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 30px;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 1rem auto 0.5rem;
+            padding: 0 1rem;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            border: 1px solid #f0f0f5;
+        }
+        .search-box i {
+            color: #ff6f2f;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            padding: 0.5rem 0;
+        }
+        .search-box button {
+            background: #ff6f2f;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .slider-container {
+            max-width: 1200px;
+            margin: 2rem auto 0.5rem;
+            padding: 0 1rem;
+            position: relative;
+        }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .slider-title {
+            font-weight: 600;
+            color: #ff6f2f;
+        }
+        .slide-arrow-left, .slide-arrow-right {
+            position: absolute;
+            top: 55%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 15;
+            border: 1px solid #ff6f2f40;
+            transition: 0.2s;
+            color: #ff6f2f;
+            font-size: 1.3rem;
+        }
+        .slide-arrow-left {
+            left: 0px;
+        }
+        .slide-arrow-right {
+            right: 0px;
+        }
+        .slide-arrow-left:hover, .slide-arrow-right:hover {
+            background: #ff6f2f;
+            color: white;
+        }
+        .slide-track-wrapper {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            padding: 4px 0 12px;
+        }
+        .slide-track {
+            display: flex;
+            gap: 1rem;
+        }
+        .slide-card {
+            flex: 0 0 170px;
+            background: white;
+            border-radius: 20px;
+            padding: 0.8rem;
+            border: 1px solid #f0f0f5;
+            position: relative;
+        }
+        .product-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 30px;
+            z-index: 5;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .tag-yellow {
+            background: #ffeb3b;
+            color: #000;
+        }
+        .tag-blue {
+            background: #2196f3;
+            color: #fff;
+        }
+        .tag-green {
+            background: #4caf50;
+            color: #fff;
+        }
+        .tag-purple {
+            background: #9c27b0;
+            color: #fff;
+        }
+        .tag-red {
+            background: #f44336;
+            color: #fff;
+        }
+        .slide-card .product-img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 14px;
+            cursor: pointer;
+        }
+        .price-add {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+        .price { font-weight: 700; }
+        .price::before { content: '₹'; }
+        .add-btn {
+            background: #ff6f2f;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0 2rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            padding: 0.8rem;
+            border: 1px solid #f0f0f5;
+            position: relative;
+        }
+        .product-card .product-img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
+        .not-found-msg {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.4rem;
+            color: #888;
+            width: 100%;
+            grid-column: 1 / -1;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-modal.show { display: flex; }
+        .modal-content {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .modal-image {
+            flex: 1;
+            padding: 20px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-image img { max-width: 100%; max-height: 500px; object-fit: contain; }
+        .modal-comments {
+            flex: 1;
+            padding: 20px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            max-height: 600px;
+        }
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .close-modal { font-size: 24px; cursor: pointer; }
+        .comment-form { margin-bottom: 20px; }
+        .comment-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        .comment-form button {
+            background: #ff6f2f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .comment-form button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .comments-list { 
+            flex:1; 
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .comment-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid #ff6f2f;
+            display: flex;
+            gap: 10px;
+        }
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ff6f2f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .comment-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .comment-content {
+            flex: 1;
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .comment-name { 
+            font-weight: bold; 
+            color: #ff6f2f;
+        }
+        .comment-date {
+            font-size: 0.7rem;
+            color: #999;
+        }
+        .comment-text {
+            font-size: 0.9rem;
+            word-wrap: break-word;
+        }
+
+        /* Login Popup - Updated with White Thunder Lightning inside Orange Circle logo */
+        .login-popup {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            z-index: 1100;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .login-popup.show { display: block; }
+        .login-logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .login-logo {
+            width: 55px;
+            height: 55px;
+            background: #ff6f2f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 111, 47, 0.3);
+        }
+        .login-logo i {
+            font-size: 32px;
+            color: #ffffff;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+        }
+        .brand-mizo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: black;
+        }
+        .brand-minute {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff6f2f;
+        }
+        .auth-toggle-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .auth-toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ff6f2f;
+            border-radius: 30px;
+            background: white;
+            color: #ff6f2f;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .auth-toggle-btn.active {
+            background: #ff6f2f;
+            color: white;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .login-form input {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            width: 100%;
+        }
+        .login-form input:focus {
+            border-color: #ff6f2f;
+        }
+        #signupFields input {
+            width: 100%;
+        }
+        .profile-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .profile-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px dashed #ff6f2f;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+        .profile-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-preview i {
+            font-size: 3rem;
+            color: #999;
+        }
+        .upload-btn {
+            background: #f0f2f5;
+            color: #666;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .upload-btn:hover {
+            background: #e0e0e0;
+        }
+        .login-form button {
+            background: #ff6f2f;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+        .login-form button:hover {
+            background: #ff5500;
+        }
+        .login-form button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .close-popup { 
+            float: right; 
+            font-size: 1.8rem; 
+            cursor: pointer;
+            color: #999;
+        }
+        .close-popup:hover {
+            color: #ff6f2f;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+
+        /* Support Popup */
+        .support-popup {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            z-index: 1500;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .support-popup.show { display: block; }
+        .support-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        .support-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #eee;
+            flex: 1;
+            min-width: 120px;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+        .support-card:hover {
+            border-color: #ff6f2f;
+            transform: scale(1.02);
+        }
+        .support-card i {
+            font-size: 2.5rem;
+            color: #ff6f2f;
+            margin-bottom: 10px;
+        }
+        .support-card h4 {
+            margin: 8px 0;
+        }
+        .support-card p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .support-detail {
+            background: #f0f2f5;
+            border-radius: 20px;
+            padding: 15px;
+            margin-top: 15px;
+            word-break: break-word;
+        }
+        .support-close {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        /* Cart Styles */
+        .cart-overlay {
+            position: fixed;
+            top: 0; right: 0;
+            width: 380px; height: 100vh;
+            background: white;
+            transform: translateX(100%);
+            transition: 0.25s;
+            z-index: 200;
+            padding: 1rem;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-overlay.open { transform: translateX(0); }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6f2f;
+        }
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ff6f2f;
+        }
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        .cart-item-price {
+            font-size: 0.8rem;
+            color: #ff6f2f;
+            font-weight: 600;
+        }
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .qty-btn:hover {
+            background: #ff6f2f;
+            color: white;
+            border-color: #ff6f2f;
+        }
+        .qty-number {
+            font-weight: 600;
+            min-width: 24px;
+            text-align: center;
+        }
+        .cart-item-total {
+            font-weight: 700;
+            font-size: 0.9rem;
+            min-width: 60px;
+            text-align: right;
+        }
+        .cart-footer {
+            border-top: 2px solid #ff6f2f;
+            padding-top: 15px;
+            background: white;
+        }
+        .bill-details-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .bill-grand-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #ddd;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #ff6f2f;
+        }
+        .checkout-btn {
+            background: linear-gradient(135deg, #ff6f2f 0%, #ff5500 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 50px;
+            width: 100%;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 111, 47, 0.3);
+        }
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 111, 47, 0.4);
+        }
+
+        /* Admin Panel Styles */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            z-index: 2000;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .admin-panel.show { display: block; }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ff6f2f;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .admin-search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .admin-search-box input {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 14px;
+            outline: none;
+        }
+        .admin-search-box button {
+            background: #ff6f2f;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .admin-orders-list {
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+        .admin-order-item {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .admin-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .admin-status-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ff6f2f;
+            margin-right: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .admin-delivery-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #28a745;
+            margin-right: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+        }
+        .admin-update-btn {
+            background: #ff6f2f;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .admin-delivery-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .admin-close-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .admin-trigger-area {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 999;
+        }
+        .admin-login-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            z-index: 2100;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .admin-login-modal.show { display: block; }
+        .admin-login-modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+        }
+        .admin-login-modal button {
+            background: #ff6f2f;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .order-detail-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+        .order-item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .checkout-modal, .success-modal, .order-details-modal, .backdrop, .tracking-timeline, .order-card, .status-badge {
+            /* existing styles */
+        }
+        .checkout-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 24px; z-index: 1200; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .checkout-modal.show { display: block; }
+        .checkout-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .checkout-form input, .checkout-form textarea, .checkout-form select { padding: 12px 15px; border: 2px solid #ddd; border-radius: 30px; font-size: 16px; outline: none; width: 100%; }
+        .place-order-btn { background: #ff6f2f; color: white; border: none; padding: 16px; border-radius: 30px; font-weight: 600; cursor: pointer; }
+        .order-summary { background: #f8f9fa; padding: 15px; border-radius: 20px; margin: 10px 0; }
+        .success-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 24px; z-index: 1300; width: 90%; max-width: 400px; text-align: center; }
+        .success-modal.show { display: block; }
+        .order-details-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 24px; z-index: 1400; width: 90%; max-width: 650px; max-height: 80vh; overflow-y: auto; }
+        .order-details-modal.show { display: block; }
+        .backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 180; display: none; }
+        .backdrop.show { display: block; }
+        .tracking-timeline { margin: 20px 0; position: relative; padding: 10px 0; }
+        .timeline-step { display: flex; margin-bottom: 20px; position: relative; align-items: flex-start; }
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .order-card { background: #f8f9fa; border-radius: 16px; padding: 15px; margin-bottom: 20px; border-left: 4px solid #ff6f2f; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-confirmed { background: #d4edda; color: #155724; }
+        .status-out-for-delivery { background: #cce5ff; color: #004085; }
+        .status-delivered { background: #d1ecf1; color: #0c5460; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .delivery-time-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            .modal-content { flex-direction: column; }
+            .cart-overlay { width: 100%; }
+            .login-logo { width: 45px; height: 45px; }
+            .login-logo i { font-size: 26px; }
+            .brand-mizo, .brand-minute { font-size: 1.5rem; }
+            .support-options { flex-direction: column; }
+            .admin-header { flex-direction: column; align-items: stretch; }
+            
+            /* Mobile: Login button stays in top-left corner */
+            .top-header {
+                padding: 0.5rem 1rem;
+                flex-wrap: wrap;
+            }
+            .header-left {
+                flex: 1;
+                gap: 10px;
+            }
+            .profile-login {
+                padding: 4px 12px 4px 6px;
+            }
+            .profile-pic {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+            .profile-name {
+                max-width: 80px;
+                font-size: 0.85rem;
+            }
+            /* Cart icon smaller on mobile */
+            .cart-icon {
+                padding: 6px 12px;
+            }
+            .cart-text {
+                font-size: 0.7rem;
+            }
+            .cart-count {
+                padding: 1px 5px;
+                font-size: 0.65rem;
+                top: -6px;
+                right: -6px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .profile-name {
+                max-width: 60px;
+                font-size: 0.75rem;
+            }
+            .cart-text {
+                display: none;
+            }
+            .cart-icon {
+                padding: 6px 10px;
+            }
+        }
+        
+        /* =============================================== */
+        /* ✅ EMAIL TOAST NOTIFICATION STYLES */
+        /* =============================================== */
+        .email-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+        }
+        .email-toast i {
+            font-size: 1.2rem;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-header">
+        <div class="header-left">
+            <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                <div class="profile-login" id="profileLoginBtn">
+                    <div class="profile-pic" id="profilePicDisplay">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="profile-name" id="profileNameDisplay">Login</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-content">
+                    <a href="#" id="yourOrderLink"><i class="fas fa-box"></i> Your Order</a>
+                    <a href="#" id="trackOrderLink"><i class="fas fa-map-marker-alt"></i> Track Order</a>
+                    <a href="#" id="supportLink"><i class="fas fa-headset"></i> Support</a>
+                    <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+            <div class="profile-login" id="loginOnlyBtn" style="display: flex;">
+                <div class="profile-pic">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span class="profile-name">Login</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+        <button class="cart-icon" id="openCartBtn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-text" id="cartItemsText">Items 0</span>
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </header>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search products...">
+            <button onclick="searchProducts()">Search</button>
+        </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- PRODUCT SECTIONS - START                         -->
+    <!-- =============================================== -->
+    <!-- TO ADD/UPDATE PRODUCTS: Modify the 'products' array in the JavaScript section below -->
+    <!-- Each product needs: id, name, description, price, image, tag -->
+    <!-- The sections are automatically populated based on array indices: -->
+    <!-- Snacks: indices 0-19 (20 products) -->
+    <!-- Flowers: indices 20-39 (20 products) -->
+    <!-- Lunch & Dinner: indices 40-69 (30 products) -->
+    <!-- Skincare: indices 70-89 (20 products) -->
+    <!-- Electronics: indices 90-129 (40 products) -->
+    <!-- =============================================== -->
+    
+    <!-- Snacks Section (20 products) -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">🍿 Snacks</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft1"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight1"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper1">
+            <div class="slide-track" id="slideTrack1"></div>
+        </div>
+    </div>
+
+    <!-- Flowers Section (20 products) -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">🌸 Flowers</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft2"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight2"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper2">
+            <div class="slide-track" id="slideTrack2"></div>
+        </div>
+    </div>
+
+    <!-- Lunch & Dinner Section (30 products) -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">🍽️ Lunch & Dinner</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft3"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight3"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper3">
+            <div class="slide-track" id="slideTrack3"></div>
+        </div>
+    </div>
+
+    <!-- Skincare Section (20 products) -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">💆 Skincare</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft4"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight4"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper4">
+            <div class="slide-track" id="slideTrack4"></div>
+        </div>
+    </div>
+
+    <!-- Electronics Section (40 products) -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">📱 Electronics</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft5"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight5"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper5">
+            <div class="slide-track" id="slideTrack5"></div>
+        </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- PRODUCT SECTIONS - END                           -->
+    <!-- =============================================== -->
+
+    <div class="container" style="max-width:1200px; margin:0 auto; padding:0 1rem;">
+        <div class="product-grid" id="productGrid"></div>
+    </div>
+
+    <div id="adminTrigger" style="position:fixed; bottom:10px; right:10px; width:30px; height:30px; background:transparent;"></div>
+
+    <!-- Login Popup with White Thunder Lightning inside Orange Circle logo -->
+    <div class="login-popup" id="loginPopup">
+        <span class="close-popup" onclick="closeLoginPopup()">&times;</span>
+        <div class="login-logo-container">
+            <div class="login-logo">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div>
+                <span class="brand-mizo">Mizo</span><span class="brand-minute">Minute</span>
+            </div>
+        </div>
+        <p style="color: #666; margin: 10px 0;" id="loginSubtitle"></p>
+        
+        <div class="auth-toggle-buttons" id="authToggleButtons">
+            <button class="auth-toggle-btn active" onclick="setAuthMode('login')">Login</button>
+            <button class="auth-toggle-btn" onclick="setAuthMode('signup')">Sign Up</button>
+        </div>
+
+        <div class="login-form">
+            <div id="signupFields" style="display: none;">
+                <div class="profile-upload">
+                    <div class="profile-preview" id="profilePreview" onclick="document.getElementById('profileImageInput').click()">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="optimizeAndUploadProfileImage(event)">
+                    <label for="profileImageInput" class="upload-btn">Upload Profile Picture *</label>
+                    <small style="color:#999; font-size:11px;">Auto compressed (50% quality)</small>
+                </div>
+                <input type="text" id="signupName" placeholder="Full Name *">
+            </div>
+            <input type="tel" id="loginPhone" placeholder="Phone Number (10 digits) *" pattern="[0-9]{10}" maxlength="10">
+            <div class="error-message" id="loginErrorMessage"></div>
+            <button type="button" onclick="handleAuth()" id="authSubmitBtn">Login</button>
+        </div>
+    </div>
+
+    <!-- Support Popup - Email and Instagram only -->
+    <div class="support-popup" id="supportPopup">
+        <span class="close-popup" onclick="closeSupportPopup()">&times;</span>
+        <h2><i class="fas fa-headset"></i> Support Center</h2>
+        <div class="support-options">
+            <div class="support-card" id="emailSupportBtn">
+                <i class="fas fa-envelope"></i>
+                <h4>Email</h4>
+                <p>Get help via email</p>
+            </div>
+            <a href="https://www.instagram.com/mizo.minute/" target="_blank" class="support-card" id="instagramSupportBtn">
+                <i class="fab fa-instagram"></i>
+                <h4>Instagram</h4>
+                <p>Follow us @mizo.minute</p>
+            </a>
+        </div>
+        <div id="supportDetailArea"></div>
+        <button class="support-close" onclick="closeSupportPopup()">Close</button>
+    </div>
+
+    <div class="checkout-modal" id="checkoutModal">
+        <span class="close-popup" onclick="closeCheckoutModal()">&times;</span>
+        <h2>Checkout</h2>
+        <div class="order-summary" id="orderSummary">
+            <h4>Order Summary</h4>
+            <div id="summaryItems"></div>
+            <div class="summary-total" id="subtotal">Subtotal: ₹0</div>
+            <div class="summary-charges" id="charges"></div>
+            <div class="grand-total" id="grandTotal">Grand Total: ₹0</div>
+        </div>
+        <div class="checkout-form">
+            <input type="text" id="deliveryName" placeholder="Full Name *" required>
+            <input type="tel" id="deliveryPhone" placeholder="Phone Number *" required>
+            <input type="email" id="deliveryEmail" placeholder="Email (Required for order confirmation) *" required>
+            <textarea id="deliveryAddress" placeholder="Delivery Address *" required></textarea>
+            <input type="text" id="deliveryLandmark" placeholder="Landmark *" required>
+            <input type="text" id="deliveryHouseNo" placeholder="House No./Flat No. *" required>
+            <input type="text" id="deliveryCity" value="Aizawl" readonly class="readonly-field">
+            <select id="paymentMethod" required>
+                <option value="" disabled selected>Select Payment Method *</option>
+                <option value="COD">Cash on Delivery (COD)</option>
+                <option value="POD">Pay on Delivery (POD)</option>
+            </select>
+            <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+        </div>
+    </div>
+
+    <div class="success-modal" id="successModal">
+        <div class="success-icon">✅</div>
+        <div class="success-message">Order Placed Successfully!</div>
+        <div class="success-submessage">Your order details have been sent to your email</div>
+        <p style="margin: 15px 0; color: #666;">Your order has been confirmed and will be delivered soon.</p>
+        <button class="track-order-btn" onclick="trackOrder()">Track Order</button>
+        <button class="close-success-btn" onclick="closeSuccessModal()">Continue Shopping</button>
+    </div>
+
+    <div class="order-details-modal" id="orderDetailsModal">
+        <span class="close-popup" onclick="closeOrderDetailsModal()">&times;</span>
+        <div id="orderDetailsList"></div>
+    </div>
+
+    <div class="image-modal" id="imageModal">
+        <div class="modal-content">
+            <div class="modal-image">
+                <img id="modalProductImage" src="" alt="">
+            </div>
+            <div class="modal-comments">
+                <div class="comments-header">
+                    <h3>Comments & Reviews</h3>
+                    <span class="close-modal" onclick="closeImageModal()">&times;</span>
+                </div>
+                <div class="comment-form">
+                    <textarea id="commentText" placeholder="Write your comment or review..." rows="3"></textarea>
+                    <div style="margin-bottom:8px;">
+                        <span onclick="addEmojiToComment('😊')" style="cursor:pointer; font-size:1.5rem;">😊</span>
+                        <span onclick="addEmojiToComment('👍')" style="cursor:pointer; font-size:1.5rem;">👍</span>
+                        <span onclick="addEmojiToComment('❤️')" style="cursor:pointer; font-size:1.5rem;">❤️</span>
+                        <span onclick="addEmojiToComment('⭐')" style="cursor:pointer; font-size:1.5rem;">⭐</span>
+                        <span onclick="addEmojiToComment('🔥')" style="cursor:pointer; font-size:1.5rem;">🔥</span>
+                    </div>
+                    <button onclick="submitComment()">Post Comment</button>
+                </div>
+                <div class="comments-list" id="commentsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartSidebar">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" id="closeCartBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItemsList"></div>
+        <div class="cart-footer">
+            <div class="bill-details-title">Bill Details</div>
+            <div id="cartBillDetails"></div>
+            <button class="checkout-btn" onclick="showCheckoutForm()">Proceed to Checkout →</button>
+        </div>
+    </div>
+
+    <div class="backdrop" id="backdrop" onclick="closeAllModals()"></div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h2><i class="fas fa-user-shield"></i> Admin Dashboard - Order Management</h2>
+            <div class="admin-search-box">
+                <input type="text" id="adminSearchInput" placeholder="Search by customer name...">
+                <button onclick="filterAdminOrders()"><i class="fas fa-search"></i> Search</button>
+                <button onclick="clearAdminSearch()" style="background:#6c757d;">Clear</button>
+            </div>
+            <button class="admin-close-btn" onclick="closeAdminPanel()">Close</button>
+        </div>
+        <div class="admin-orders-list" id="adminOrdersList">
+            <div class="loading-spinner">Loading orders...</div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="admin-login-modal" id="adminLoginModal">
+        <span class="close-popup" onclick="closeAdminLoginModal()">&times;</span>
+        <h3><i class="fas fa-lock"></i> Admin Access</h3>
+        <p style="margin: 15px 0; color: #666;">Enter admin password to access dashboard</p>
+        <input type="password" id="adminPassword" placeholder="Admin Password" autocomplete="off">
+        <button onclick="verifyAdminLogin()">Access Dashboard</button>
+    </div>
+
+    <div class="admin-trigger-area" id="adminTriggerArea" title="Double-click for admin access"></div>
+
+    <script>
+        // ===============================================
+        // ✅ EMAILJS REMOVED - USING BACKEND NODEMAILER
+        // ===============================================
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkDuxyIc2u6tmMB81Ru0n4DkCfR4TpmGQ",
+            authDomain: "mizominute-6294f.firebaseapp.com",
+            projectId: "mizominute-6294f",
+            storageBucket: "mizominute-6294f.firebasestorage.app",
+            messagingSenderId: "4195954983",
+            appId: "1:4195954983:web:2666b66b6fb2a1f25ff902"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ===============================================
+        // PRODUCTS ARRAY - UPDATE PRODUCTS HERE
+        // ===============================================
+        // SECTION MAPPING:
+        // Snacks: indices 0-19 (20 products)
+        // Flowers: indices 20-39 (20 products)  
+        // Lunch & Dinner: indices 40-69 (30 products)
+        // Skincare: indices 70-89 (20 products)
+        // Electronics: indices 90-129 (40 products)
+        // TOTAL: 130 products
+        // ===============================================
+        
+        let products = [
+            // SNACKS SECTION (20 products) - indices 0 to 19
+            { id:1, name:"Lays Classic Salted", description:"Crispy potato chips", price:20, image:"https://static.wixstatic.com/media/11062b_8c2d7e6c8c8e4f2b9f6c8b6a1e7b5c3f~mv2.jpg", tag:"Snacks" },
+            { id:2, name:"Kurkure Masala Munch", description:"Crunchy corn snacks", price:20, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Snacks" },
+            { id:3, name:"Pringles Original", description:"Stackable potato crisps", price:120, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Snacks" },
+            { id:4, name:"Doritos Nachos", description:"Cheese flavored tortilla chips", price:70, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Snacks" },
+            { id:5, name:"Cheetos Puffs", description:"Cheesy puffs", price:30, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Snacks" },
+            { id:6, name:"Maggie Noodles", description:"Masala instant noodles", price:14, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7890a1b2c3d4e5f67890a1~mv2.jpg", tag:"Snacks" },
+            { id:7, name:"Bourbon Biscuit", description:"Chocolate cream biscuits", price:30, image:"https://static.wixstatic.com/media/11062b_a2b3c4d5e6f7890a1b2c3d4e5f67890a~mv2.jpg", tag:"Snacks" },
+            { id:8, name:"Oreo Pack", description:"Chocolate sandwich cookies", price:60, image:"https://static.wixstatic.com/media/11062b_4d5e6f7890a1b2c3d4e5f67890a1b2c3~mv2.jpg", tag:"Snacks" },
+            { id:9, name:"KitKat", description:"Chocolate wafer bar", price:30, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7890a1b2c3d4e5f67890~mv2.jpg", tag:"Snacks" },
+            { id:10, name:"Dairy Milk Silk", description:"Smooth milk chocolate", price:150, image:"https://static.wixstatic.com/media/11062b_5e6f7890a1b2c3d4e5f67890a1b2c3d4~mv2.jpg", tag:"Snacks" },
+            { id:11, name:"Munch", description:"Chocolate bar", price:10, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Snacks" },
+            { id:12, name:"Parle G", description:"Glucose biscuits", price:30, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Snacks" },
+            { id:13, name:"Hide & Seek", description:"Chocolate chip cookies", price:40, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Snacks" },
+            { id:14, name:"Good Day", description:"Butter cookies", price:35, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Snacks" },
+            { id:15, name:"Dark Fantasy", description:"Choco filled cookies", price:60, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Snacks" },
+            { id:16, name:"Sunfeast Marie", description:"Light biscuits", price:25, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Snacks" },
+            { id:17, name:"Lotte Choco Pie", description:"Chocolate cream pie", price:110, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Snacks" },
+            { id:18, name:"Ferrero Rocher", description:"Premium chocolate", price:180, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Snacks" },
+            { id:19, name:"Hershey's", description:"Milk chocolate", price:90, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Snacks" },
+            { id:20, name:"Bournville", description:"Dark chocolate", price:160, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Snacks" },
+            
+            // FLOWERS SECTION (20 products) - indices 20 to 39
+            { id:21, name:"Red Rose Bouquet", description:"Fresh red roses", price:299, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7890a1b2c3d4e5f67890a1b2~mv2.jpg", tag:"Flowers" },
+            { id:22, name:"Sunflower Bunch", description:"Bright sunflowers", price:249, image:"https://static.wixstatic.com/media/11062b_4d5e6f7890a1b2c3d4e5f67890a1b2c3~mv2.jpg", tag:"Flowers" },
+            { id:23, name:"Lily Arrangement", description:"Elegant white lilies", price:399, image:"https://static.wixstatic.com/media/11062b_5e6f7890a1b2c3d4e5f67890a1b2c3d4~mv2.jpg", tag:"Flowers" },
+            { id:24, name:"Tulip Bunch", description:"Colorful tulips", price:349, image:"https://static.wixstatic.com/media/11062b_6f7890a1b2c3d4e5f67890a1b2c3d4e5~mv2.jpg", tag:"Flowers" },
+            { id:25, name:"Orchid Plant", description:"Exotic orchid", price:449, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Flowers" },
+            { id:26, name:"Mixed Flower Bouquet", description:"Assorted fresh flowers", price:379, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Flowers" },
+            { id:27, name:"Carnation Bunch", description:"Pretty carnations", price:199, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Flowers" },
+            { id:28, name:"Daisy Bouquet", description:"Cheerful daisies", price:229, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Flowers" },
+            { id:29, name:"Jasmine Garland", description:"Fragrant jasmine", price:179, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Flowers" },
+            { id:30, name:"Marigold Bunch", description:"Vibrant marigolds", price:149, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Flowers" },
+            { id:31, name:"Lavender Bouquet", description:"Calming lavender", price:279, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Flowers" },
+            { id:32, name:"Peony Bunch", description:"Romantic peonies", price:429, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Flowers" },
+            { id:33, name:"Hydrangea Bouquet", description:"Full hydrangeas", price:389, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Flowers" },
+            { id:34, name:"Gerbera Bunch", description:"Colorful gerberas", price:259, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Flowers" },
+            { id:35, name:"Chrysanthemum", description:"Floral chrysanthemums", price:189, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Flowers" },
+            { id:36, name:"Baby Breath", description:"Delicate filler flowers", price:129, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Flowers" },
+            { id:37, name:"Gladiolus", description:"Tall elegant flowers", price:219, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Flowers" },
+            { id:38, name:"Iris Bouquet", description:"Beautiful irises", price:289, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Flowers" },
+            { id:39, name:"Dahlia Bunch", description:"Stunning dahlias", price:319, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Flowers" },
+            { id:40, name:"Zinnia Bouquet", description:"Vibrant zinnias", price:239, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Flowers" },
+            
+            // LUNCH & DINNER SECTION (30 products) - indices 40 to 69
+            { id:41, name:"Chicken Biryani", description:"Aromatic rice with chicken", price:250, image:"https://res.cloudinary.com/dpwfql8zg/image/upload/v1773222010/7_odazoy.jpg", tag:"Meal" },
+            { id:42, name:"Veg Thali", description:"Complete vegetarian meal", price:180, image:"https://static.wixstatic.com/media/11062b_3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b~mv2.jpg", tag:"Meal" },
+            { id:43, name:"Butter Chicken", description:"Creamy tomato curry", price:320, image:"https://static.wixstatic.com/media/11062b_4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c~mv2.jpg", tag:"Meal" },
+            { id:44, name:"Paneer Butter Masala", description:"Cottage cheese in rich gravy", price:280, image:"https://static.wixstatic.com/media/11062b_5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d~mv2.jpg", tag:"Meal" },
+            { id:45, name:"Dal Makhani", description:"Creamy black lentils", price:220, image:"https://static.wixstatic.com/media/11062b_6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e~mv2.jpg", tag:"Meal" },
+            { id:46, name:"Naan Bread", description:"Freshly baked bread", price:40, image:"https://static.wixstatic.com/media/11062b_7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f~mv2.jpg", tag:"Meal" },
+            { id:47, name:"Chicken Fried Rice", description:"Chinese style fried rice", price:210, image:"https://static.wixstatic.com/media/11062b_8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a~mv2.jpg", tag:"Meal" },
+            { id:48, name:"Veg Noodles", description:"Indo-Chinese noodles", price:150, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Meal" },
+            { id:49, name:"Chili Chicken", description:"Spicy chicken appetizer", price:260, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Meal" },
+            { id:50, name:"Veg Manchurian", description:"Vegetable balls in sauce", price:190, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Meal" },
+            { id:51, name:"Tandoori Chicken", description:"Grilled chicken", price:340, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Meal" },
+            { id:52, name:"Fish Curry", description:"Bengali style fish curry", price:380, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Meal" },
+            { id:53, name:"Mutton Rogan Josh", description:"Kashmiri mutton curry", price:450, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Meal" },
+            { id:54, name:"Palak Paneer", description:"Spinach with cottage cheese", price:240, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Meal" },
+            { id:55, name:"Chole Bhature", description:"Chickpea curry with fried bread", price:160, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Meal" },
+            { id:56, name:"Masala Dosa", description:"Crispy rice crepe", price:120, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Meal" },
+            { id:57, name:"Idli Sambhar", description:"Steamed rice cakes", price:90, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Meal" },
+            { id:58, name:"Pav Bhaji", description:"Spiced vegetable mash", price:110, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Meal" },
+            { id:59, name:"Samosa", description:"Fried pastry with filling", price:30, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Meal" },
+            { id:60, name:"Spring Roll", description:"Crispy vegetable rolls", price:50, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Meal" },
+            { id:61, name:"Chicken Wrap", description:"Grilled chicken in tortilla", price:180, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Meal" },
+            { id:62, name:"Veg Burger", description:"Vegetable patty burger", price:120, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Meal" },
+            { id:63, name:"Pizza Margherita", description:"Classic cheese pizza", price:299, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Meal" },
+            { id:64, name:"Pasta Alfredo", description:"Creamy pasta", price:210, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Meal" },
+            { id:65, name:"Lasagna", description:"Baked pasta layers", price:280, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Meal" },
+            { id:66, name:"Grilled Sandwich", description:"Toasted sandwich with veggies", price:100, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Meal" },
+            { id:67, name:"French Fries", description:"Crispy potato fries", price:80, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Meal" },
+            { id:68, name:"Onion Rings", description:"Crispy fried onions", price:90, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Meal" },
+            { id:69, name:"Garlic Bread", description:"Toasted bread with garlic", price:70, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Meal" },
+            { id:70, name:"Cheese Pizza", description:"Cheesy pizza", price:349, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Meal" },
+            
+            // SKINCARE SECTION (20 products) - indices 70 to 89
+            { id:71, name:"Face Wash", description:"Gentle cleansing", price:150, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Skincare" },
+            { id:72, name:"Moisturizer", description:"Hydrating cream", price:250, image:"https://static.wixstatic.com/media/11062b_3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b~mv2.jpg", tag:"Skincare" },
+            { id:73, name:"Sunscreen SPF 50", description:"UV protection", price:350, image:"https://static.wixstatic.com/media/11062b_4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c~mv2.jpg", tag:"Skincare" },
+            { id:74, name:"Face Serum", description:"Vitamin C serum", price:450, image:"https://static.wixstatic.com/media/11062b_5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d~mv2.jpg", tag:"Skincare" },
+            { id:75, name:"Face Scrub", description:"Exfoliating scrub", price:200, image:"https://static.wixstatic.com/media/11062b_6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e~mv2.jpg", tag:"Skincare" },
+            { id:76, name:"Face Mask", description:"Clay mask", price:280, image:"https://static.wixstatic.com/media/11062b_7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f~mv2.jpg", tag:"Skincare" },
+            { id:77, name:"Toner", description:"Facial toner", price:180, image:"https://static.wixstatic.com/media/11062b_8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a~mv2.jpg", tag:"Skincare" },
+            { id:78, name:"Eye Cream", description:"Under eye care", price:320, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Skincare" },
+            { id:79, name:"Lip Balm", description:"Moisturizing lip care", price:80, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Skincare" },
+            { id:80, name:"Body Lotion", description:"Body moisturizer", price:220, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Skincare" },
+            { id:81, name:"Hand Cream", description:"Nourishing hand cream", price:120, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Skincare" },
+            { id:82, name:"Night Cream", description:"Overnight repair", price:380, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Skincare" },
+            { id:83, name:"Under Eye Patches", description:"Revitalizing patches", price:290, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Skincare" },
+            { id:84, name:"Sheet Mask", description:"Hydrating sheet mask", price:99, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Skincare" },
+            { id:85, name:"Face Mist", description:"Refreshing spray", price:160, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Skincare" },
+            { id:86, name:"Cleansing Oil", description:"Oil-based cleanser", price:260, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Skincare" },
+            { id:87, name:"Micellar Water", description:"Gentle makeup remover", price:190, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Skincare" },
+            { id:88, name:"Retinol Cream", description:"Anti-aging cream", price:420, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Skincare" },
+            { id:89, name:"Hyaluronic Acid", description:"Intense hydration", price:390, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Skincare" },
+            { id:90, name:"Niacinamide Serum", description:"Pore minimizing", price:340, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Skincare" },
+            
+            // ELECTRONICS SECTION (40 products) - indices 90 to 129
+            { id:91, name:"Wireless Earbuds", description:"Bluetooth earphones", price:999, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Electronics" },
+            { id:92, name:"Power Bank 10000mAh", description:"Portable charger", price:799, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Electronics" },
+            { id:93, name:"Smart Watch", description:"Fitness tracker", price:2499, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Electronics" },
+            { id:94, name:"Bluetooth Speaker", description:"Portable speaker", price:1499, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Electronics" },
+            { id:95, name:"USB-C Cable", description:"Fast charging cable", price:199, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Electronics" },
+            { id:96, name:"Phone Case", description:"Protective cover", price:399, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Electronics" },
+            { id:97, name:"Screen Protector", description:"Tempered glass", price:149, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Electronics" },
+            { id:98, name:"Wireless Charger", description:"Qi charging pad", price:899, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Electronics" },
+            { id:99, name:"Selfie Stick", description:"Extendable phone holder", price:299, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Electronics" },
+            { id:100, name:"Tripod", description:"Camera/phone stand", price:499, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Electronics" },
+            { id:101, name:"Smart Bulb", description:"WiFi enabled LED", price:599, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Electronics" },
+            { id:102, name:"HDMI Cable", description:"High speed cable", price:249, image:"https://static.wixstatic.com/media/11062b_3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b~mv2.jpg", tag:"Electronics" },
+            { id:103, name:"USB Hub", description:"Multi-port adapter", price:399, image:"https://static.wixstatic.com/media/11062b_4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c~mv2.jpg", tag:"Electronics" },
+            { id:104, name:"Webcam", description:"HD camera", price:1299, image:"https://static.wixstatic.com/media/11062b_5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d~mv2.jpg", tag:"Electronics" },
+            { id:105, name:"Gaming Mouse", description:"RGB gaming mouse", price:699, image:"https://static.wixstatic.com/media/11062b_6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e~mv2.jpg", tag:"Electronics" },
+            { id:106, name:"Mechanical Keyboard", description:"RGB keyboard", price:1899, image:"https://static.wixstatic.com/media/11062b_7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f~mv2.jpg", tag:"Electronics" },
+            { id:107, name:"Laptop Stand", description:"Ergonomic stand", price:799, image:"https://static.wixstatic.com/media/11062b_8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a~mv2.jpg", tag:"Electronics" },
+            { id:108, name:"Cooling Pad", description:"Laptop cooler", price:899, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Electronics" },
+            { id:109, name:"Smart Plug", description:"WiFi smart outlet", price:499, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Electronics" },
+            { id:110, name:"Fitness Band", description:"Activity tracker", price:1499, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Electronics" },
+            { id:111, name:"Action Camera", description:"Waterproof camera", price:3499, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Electronics" },
+            { id:112, name:"Drone", description:"Mini drone", price:4999, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Electronics" },
+            { id:113, name:"VR Headset", description:"Virtual reality", price:1999, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Electronics" },
+            { id:114, name:"Smart Speaker", description:"Voice assistant", price:2499, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Electronics" },
+            { id:115, name:"Security Camera", description:"Home security", price:1799, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Electronics" },
+            { id:116, name:"Video Doorbell", description:"Smart doorbell", price:2999, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Electronics" },
+            { id:117, name:"Robot Vacuum", description:"Automatic cleaner", price:8999, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Electronics" },
+            { id:118, name:"Air Purifier", description:"Air cleaner", price:4999, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Electronics" },
+            { id:119, name:"Hair Dryer", description:"Professional dryer", price:1299, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Electronics" },
+            { id:120, name:"Trimmer", description:"Mens grooming", price:799, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Electronics" },
+            { id:121, name:"Electric Toothbrush", description:"Rechargeable", price:1499, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Electronics" },
+            { id:122, name:"Smart Scale", description:"Body analyzer", price:999, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Electronics" },
+            { id:123, name:"Projector", description:"Mini projector", price:3999, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Electronics" },
+            { id:124, name:"Portable SSD", description:"500GB storage", price:4499, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Electronics" },
+            { id:125, name:"Memory Card", description:"128GB microSD", price:899, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Electronics" },
+            { id:126, name:"USB Flash Drive", description:"64GB storage", price:399, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Electronics" },
+            { id:127, name:"Router", description:"WiFi 6 router", price:2499, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Electronics" },
+            { id:128, name:"Extender", description:"WiFi range extender", price:1299, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Electronics" },
+            { id:129, name:"HDMI Adapter", description:"USB-C to HDMI", price:499, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Electronics" },
+            { id:130, name:"Car Charger", description:"Fast car charger", price:299, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Electronics" }
+        ];
+
+        let cart = [];
+        let loggedInUser = null;
+        let currentProductId = null;
+        let currentOrderId = null;
+        let currentAuthMode = 'login';
+        let isAdminLoggedIn = false;
+        let ordersUnsubscribe = null;
+        let currentDisplayMode = 'full';
+        let allOrdersData = [];
+
+        const savedUser = localStorage.getItem('quickmart_user');
+        if (savedUser) {
+            loggedInUser = JSON.parse(savedUser);
+            console.log('✅ Loaded user:', loggedInUser);
+        }
+
+        // ===============================================
+        // 📧 EMAIL SERVICE CONFIGURATION
+        // ✅ REPLACES EMAILJS WITH BACKEND API
+        // ===============================================
+        const EMAIL_API_URL = 'http://localhost:3000/api/send-order-email';
+        
+        // Function to send order confirmation emails
+        async function sendOrderConfirmationEmails(orderData, orderId) {
+            try {
+                const response = await fetch(EMAIL_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        customerEmail: orderData.userInfo.email,
+                        customerName: orderData.userInfo.name,
+                        orderDetails: orderData,
+                        grandTotal: orderData.grandTotal,
+                        orderId: orderId
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('✅ Order confirmation emails sent successfully');
+                    showEmailToast();
+                    return true;
+                } else {
+                    console.error('❌ Email sending failed:', result.error);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Email service error:', error);
+                return false;
+            }
+        }
+        
+        // Toast notification function
+        function showEmailToast() {
+            const toast = document.createElement('div');
+            toast.className = 'email-toast';
+            toast.innerHTML = '<i class="fas fa-envelope"></i> Order confirmation sent to your email!';
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+
+        // ========== IMAGE OPTIMIZATION FUNCTION ==========
+        window.optimizeAndUploadProfileImage = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.match('image.*')) {
+                alert('Please select a valid image file');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDimension = 800;
+                    
+                    if (width > height && width > maxDimension) {
+                        height = (height * maxDimension) / width;
+                        width = maxDimension;
+                    } else if (height > maxDimension) {
+                        width = (width * maxDimension) / height;
+                        height = maxDimension;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const optimizedDataUrl = canvas.toDataURL('image/jpeg', 0.5);
+                    document.getElementById('profilePreview').innerHTML = `<img src="${optimizedDataUrl}" alt="Profile Preview">`;
+                    window.optimizedProfileImageData = optimizedDataUrl;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.previewProfileImage = function(event) {
+            optimizeAndUploadProfileImage(event);
+        };
+
+        function toggleDropdownVisibility() {
+            const profileDropdown = document.getElementById('profileDropdown');
+            const loginOnlyBtn = document.getElementById('loginOnlyBtn');
+            if (loggedInUser) {
+                profileDropdown.style.display = 'block';
+                loginOnlyBtn.style.display = 'none';
+            } else {
+                profileDropdown.style.display = 'none';
+                loginOnlyBtn.style.display = 'flex';
+            }
+        }
+
+        // ========== SUPPORT POPUP FUNCTIONS ==========
+        function showSupportPopup() {
+            document.getElementById('supportPopup').classList.add('show');
+            document.getElementById('backdrop').classList.add('show');
+            document.getElementById('supportDetailArea').innerHTML = '';
+        }
+        
+        window.closeSupportPopup = function() {
+            document.getElementById('supportPopup').classList.remove('show');
+            document.getElementById('backdrop').classList.remove('show');
+            document.getElementById('supportDetailArea').innerHTML = '';
+        };
+        
+        function showEmailSupport() {
+            document.getElementById('supportDetailArea').innerHTML = `
+                <div class="support-detail">
+                    <i class="fas fa-envelope" style="font-size: 2rem; color: #ff6f2f;"></i>
+                    <h3>Email Support</h3>
+                    <p style="margin: 15px 0; font-size: 1.1rem;">Contact us at:</p>
+                    <p style="font-size: 1.3rem; font-weight: bold; color: #ff6f2f; word-break: break-all;">support@mizominute.com</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">We'll get back to you within 24 hours.</p>
+                </div>
+            `;
+        }
+
+        // ========== AUTH MODE SETUP ==========
+        function setAuthMode(mode) {
+            currentAuthMode = mode;
+            const loginBtn = document.querySelector('.auth-toggle-btn:first-child');
+            const signupBtn = document.querySelector('.auth-toggle-btn:last-child');
+            if (mode === 'login') {
+                loginBtn.classList.add('active');
+                signupBtn.classList.remove('active');
+                document.getElementById('signupFields').style.display = 'none';
+                document.getElementById('loginSubtitle').textContent = 'Sign up if you\'re new or login using your phone number';
+                document.getElementById('authSubmitBtn').textContent = 'Login';
+            } else {
+                loginBtn.classList.remove('active');
+                signupBtn.classList.add('active');
+                document.getElementById('signupFields').style.display = 'block';
+                document.getElementById('loginSubtitle').textContent = 'Create your account';
+                document.getElementById('authSubmitBtn').textContent = 'Sign Up';
+            }
+            document.getElementById('loginErrorMessage').classList.remove('show');
+            document.getElementById('loginPhone').value = '';
+            document.getElementById('signupName').value = '';
+        }
+
+        // ========== RENDER PRODUCTS ==========
+        function renderProducts(productsToRender = products) {
+            const snacksProducts = productsToRender.slice(0, 20);
+            const flowersProducts = productsToRender.slice(20, 40);
+            const lunchDinnerProducts = productsToRender.slice(40, 70);
+            const skincareProducts = productsToRender.slice(70, 90);
+            const electronicsProducts = productsToRender.slice(90, 130);
+            
+            const slideTrack1 = document.getElementById('slideTrack1');
+            slideTrack1.innerHTML = '';
+            snacksProducts.forEach(product => {
+                const tagText = product.tag || 'Snacks';
+                const card = document.createElement('div');
+                card.className = 'slide-card';
+                card.innerHTML = `
+                    <span class="product-tag tag-yellow">${tagText}</span>
+                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                    <div class="price-add">
+                        <span class="price">${product.price}</span>
+                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                    </div>
+                `;
+                slideTrack1.appendChild(card);
+            });
+
+            const slideTrack2 = document.getElementById('slideTrack2');
+            slideTrack2.innerHTML = '';
+            flowersProducts.forEach(product => {
+                const tagText = product.tag || 'Flowers';
+                const card = document.createElement('div');
+                card.className = 'slide-card';
+                card.innerHTML = `
+                    <span class="product-tag tag-blue">${tagText}</span>
+                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                    <div class="price-add">
+                        <span class="price">${product.price}</span>
+                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                    </div>
+                `;
+                slideTrack2.appendChild(card);
+            });
+
+            const slideTrack3 = document.getElementById('slideTrack3');
+            slideTrack3.innerHTML = '';
+            lunchDinnerProducts.forEach(product => {
+                const tagText = product.tag || 'Meal';
+                const card = document.createElement('div');
+                card.className = 'slide-card';
+                card.innerHTML = `
+                    <span class="product-tag tag-green">${tagText}</span>
+                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                    <div class="price-add">
+                        <span class="price">${product.price}</span>
+                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                    </div>
+                `;
+                slideTrack3.appendChild(card);
+            });
+
+            const slideTrack4 = document.getElementById('slideTrack4');
+            slideTrack4.innerHTML = '';
+            skincareProducts.forEach(product => {
+                const tagText = product.tag || 'Skincare';
+                const card = document.createElement('div');
+                card.className = 'slide-card';
+                card.innerHTML = `
+                    <span class="product-tag tag-purple">${tagText}</span>
+                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                    <div class="price-add">
+                        <span class="price">${product.price}</span>
+                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                    </div>
+                `;
+                slideTrack4.appendChild(card);
+            });
+
+            const slideTrack5 = document.getElementById('slideTrack5');
+            slideTrack5.innerHTML = '';
+            electronicsProducts.forEach(product => {
+                const tagText = product.tag || 'Electronics';
+                const card = document.createElement('div');
+                card.className = 'slide-card';
+                card.innerHTML = `
+                    <span class="product-tag tag-red">${tagText}</span>
+                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                    <div class="price-add">
+                        <span class="price">${product.price}</span>
+                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                    </div>
+                `;
+                slideTrack5.appendChild(card);
+            });
+            
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+            const remainingProducts = productsToRender.slice(130);
+            remainingProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                    <div class="price-add">
+                        <span class="price">${product.price}</span>
+                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
+
+        window.searchProducts = function() {
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (searchTerm === '') {
+                renderProducts(products);
+                return;
+            }
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) || 
+                product.description.toLowerCase().includes(searchTerm)
+            );
+            renderProducts(filteredProducts);
+        };
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+
+        // Slider navigation for all 5 sliders
+        document.getElementById('slideLeft1').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper1').scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        document.getElementById('slideRight1').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper1').scrollBy({ left: 300, behavior: 'smooth' });
+        });
+        document.getElementById('slideLeft2').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper2').scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        document.getElementById('slideRight2').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper2').scrollBy({ left: 300, behavior: 'smooth' });
+        });
+        document.getElementById('slideLeft3').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper3').scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        document.getElementById('slideRight3').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper3').scrollBy({ left: 300, behavior: 'smooth' });
+        });
+        document.getElementById('slideLeft4').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper4').scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        document.getElementById('slideRight4').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper4').scrollBy({ left: 300, behavior: 'smooth' });
+        });
+        document.getElementById('slideLeft5').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper5').scrollBy({ left: -300, behavior: 'smooth' });
+        });
+        document.getElementById('slideRight5').addEventListener('click', () => {
+            document.getElementById('slideTrackWrapper5').scrollBy({ left: 300, behavior: 'smooth' });
+        });
+
+        // ========== CART FUNCTIONS ==========
+        window.addToCart = function(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            updateCartUI();
+        };
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                const newQuantity = item.quantity + change;
+                if (newQuantity <= 0) {
+                    cart = cart.filter(item => item.id !== productId);
+                } else {
+                    item.quantity = newQuantity;
+                }
+                updateCartUI();
+            }
+        }
+
+        function calculateChargesByTotal(subtotal) {
+            let handlingCharge = 0;
+            let smallCartCharge = 0;
+            let deliveryCharge = 0;
+            
+            if (subtotal > 800) {
+                handlingCharge = 0;
+                smallCartCharge = 0;
+                deliveryCharge = 0;
+            } else if (subtotal > 200) {
+                handlingCharge = 0;
+                smallCartCharge = 0;
+                deliveryCharge = 30;
+            } else if (subtotal > 100) {
+                handlingCharge = 10;
+                smallCartCharge = 0;
+                deliveryCharge = 30;
+            } else if (subtotal > 0) {
+                handlingCharge = 10;
+                smallCartCharge = 10;
+                deliveryCharge = 30;
+            }
+            
+            return { handlingCharge, smallCartCharge, deliveryCharge };
+        }
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+            document.getElementById('cartItemsText').textContent = `Items ${totalItems}`;
+
+            const cartItemsList = document.getElementById('cartItemsList');
+            cartItemsList.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = '<div style="text-align:center; padding:40px;">Your cart is empty</div>';
+                document.getElementById('cartBillDetails').innerHTML = '';
+                return;
+            }
+
+            cart.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item-row';
+                itemDiv.innerHTML = `
+                    <img class="cart-item-img" src="${item.image}" onerror="this.src='https://via.placeholder.com/60'">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">₹${item.price}</div>
+                        <div class="cart-item-quantity">
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <span class="qty-number">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="cart-item-total">₹${item.price * item.quantity}</div>
+                `;
+                cartItemsList.appendChild(itemDiv);
+            });
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const { handlingCharge, smallCartCharge, deliveryCharge } = calculateChargesByTotal(subtotal);
+            const grandTotal = subtotal + handlingCharge + smallCartCharge + deliveryCharge;
+            
+            let billHtml = `
+                <div class="bill-row">
+                    <span>Items total</span>
+                    <span>₹${subtotal}</span>
+                </div>
+            `;
+            
+            if (deliveryCharge > 0) {
+                billHtml += `<div class="bill-row"><span>Delivery charge</span><span>₹${deliveryCharge}</span></div>`;
+            }
+            if (handlingCharge > 0) {
+                billHtml += `<div class="bill-row"><span>Handling charge</span><span>₹${handlingCharge}</span></div>`;
+            }
+            if (smallCartCharge > 0) {
+                billHtml += `<div class="bill-row"><span>Small cart charge</span><span>₹${smallCartCharge}</span></div>`;
+            }
+            
+            billHtml += `
+                <div class="bill-grand-total">
+                    <span>Grand total</span>
+                    <span>₹${grandTotal}</span>
+                </div>
+            `;
+            
+            document.getElementById('cartBillDetails').innerHTML = billHtml;
+            window.currentCartCharges = { handlingCharge, smallCartCharge, deliveryCharge, subtotal, grandTotal };
+        }
+
+        document.getElementById('openCartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('backdrop').classList.add('show');
+        });
+
+        document.getElementById('closeCartBtn').addEventListener('click', () => {
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('backdrop').classList.remove('show');
+        });
+
+        // ========== COMMENT FUNCTIONS ==========
+        window.openImageModal = function(productId) {
+            if (!loggedInUser) {
+                localStorage.setItem('pendingCommentProduct', productId);
+                showLoginPopup();
+                alert('Please login to view and post comments');
+                return;
+            }
+            _openImageModalForProduct(productId);
+        };
+
+        function _openImageModalForProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            currentProductId = productId;
+            document.getElementById('modalProductImage').src = product.image;
+            document.getElementById('imageModal').classList.add('show');
+            document.getElementById('backdrop').classList.add('show');
+            document.getElementById('commentText').value = '';
+            loadComments(productId);
+        }
+
+        window.closeImageModal = function() {
+            document.getElementById('imageModal').classList.remove('show');
+            document.getElementById('backdrop').classList.remove('show');
+            currentProductId = null;
+        };
+
+        async function loadComments(productId) {
+            const commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = '<div style="text-align:center; padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading comments...</div>';
+            
+            try {
+                const commentsSnapshot = await db.collection('comments')
+                    .where('productId', '==', productId)
+                    .get();
+                
+                if (commentsSnapshot.empty) {
+                    commentsList.innerHTML = '<div style="text-align:center; padding:20px; color:#999;">💬 No comments yet. Be the first to comment!</div>';
+                    return;
+                }
+                
+                const commentsArray = [];
+                commentsSnapshot.forEach(doc => {
+                    const comment = doc.data();
+                    commentsArray.push({ id: doc.id, ...comment });
+                });
+                
+                commentsArray.sort((a, b) => {
+                    const timeA = a.timestamp ? new Date(a.timestamp) : new Date(0);
+                    const timeB = b.timestamp ? new Date(b.timestamp) : new Date(0);
+                    return timeB - timeA;
+                });
+                
+                commentsList.innerHTML = '';
+                
+                commentsArray.forEach(comment => {
+                    const commentDate = comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Just now';
+                    const userName = comment.userName || 'Anonymous User';
+                    const commentText = comment.text || '';
+                    const userProfileImage = comment.userProfileImage;
+                    
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment-item';
+                    commentDiv.innerHTML = `
+                        <div class="comment-avatar">
+                            ${userProfileImage ? `<img src="${userProfileImage}" alt="Profile">` : '<i class="fas fa-user"></i>'}
+                        </div>
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <span class="comment-name">${escapeHtml(userName)}</span>
+                                <span class="comment-date">${commentDate}</span>
+                            </div>
+                            <div class="comment-text">${escapeHtml(commentText)}</div>
+                        </div>
+                    `;
+                    commentsList.appendChild(commentDiv);
+                });
+                
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                commentsList.innerHTML = `<div style="text-align:center; padding:20px; color:#dc3545;">❌ Error loading comments: ${error.message}</div>`;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        window.addEmojiToComment = (emoji) => {
+            document.getElementById('commentText').value += emoji;
+        };
+
+        window.submitComment = async function() {
+            if (!loggedInUser) { 
+                localStorage.setItem('pendingCommentProduct', currentProductId);
+                showLoginPopup(); 
+                alert('Please login to post a comment');
+                return; 
+            }
+            
+            if (!currentProductId) {
+                alert('No product selected');
+                return;
+            }
+            
+            const commentText = document.getElementById('commentText').value.trim();
+            if (!commentText) {
+                alert('Please enter a comment');
+                return;
+            }
+            
+            const submitBtn = document.querySelector('#imageModal .comment-form button');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Posting...';
+            submitBtn.disabled = true;
+            
+            try {
+                const commentData = {
+                    productId: currentProductId,
+                    userId: loggedInUser.uid,
+                    userName: loggedInUser.name || loggedInUser.phone || 'User',
+                    userPhone: loggedInUser.phone || '',
+                    userProfileImage: loggedInUser.profileImage || null,
+                    text: commentText,
+                    timestamp: new Date().toISOString()
+                };
+                
+                await db.collection('comments').add(commentData);
+                document.getElementById('commentText').value = '';
+                await loadComments(currentProductId);
+                
+                const successDiv = document.createElement('div');
+                successDiv.style.cssText = 'background:#4CAF50; color:white; padding:8px; border-radius:8px; text-align:center; margin-bottom:10px;';
+                successDiv.textContent = '✅ Comment posted successfully!';
+                document.getElementById('commentsList').insertBefore(successDiv, document.getElementById('commentsList').firstChild);
+                setTimeout(() => successDiv.remove(), 3000);
+                
+            } catch (error) {
+                console.error('Error posting comment:', error);
+                alert('Error posting comment: ' + error.message);
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        };
+
+        // ========== TRACKING ORDER FUNCTIONS ==========
+        function getStatusDisplay(status) {
+            const statuses = {
+                'pending': { text: 'Pending', icon: '🕐', class: 'status-pending' },
+                'confirmed': { text: 'Confirmed', icon: '✅', class: 'status-confirmed' },
+                'out-for-delivery': { text: 'Out for Delivery', icon: '🚚', class: 'status-out-for-delivery' },
+                'delivered': { text: 'Delivered', icon: '🎉', class: 'status-delivered' },
+                'cancelled': { text: 'Cancelled', icon: '❌', class: 'status-cancelled' }
+            };
+            return statuses[status] || statuses['pending'];
+        }
+        
+        function getTrackingTimeline(order) {
+            const status = order.status || 'pending';
+            const steps = [
+                { key: 'pending', title: 'Order Placed', icon: '📝' },
+                { key: 'confirmed', title: 'Order Confirmed', icon: '✅' },
+                { key: 'out-for-delivery', title: 'Out for Delivery', icon: '🚚' },
+                { key: 'delivered', title: 'Delivered', icon: '🎉' }
+            ];
+            
+            const statusOrder = ['pending', 'confirmed', 'out-for-delivery', 'delivered'];
+            const currentStepIndex = statusOrder.indexOf(status);
+            
+            let timelineHtml = '<div class="tracking-timeline">';
+            
+            steps.forEach((step, index) => {
+                let stepStatus = '';
+                let stepDate = '';
+                
+                if (index < currentStepIndex) {
+                    stepStatus = 'completed';
+                    if (step.key === 'pending') stepDate = order.createdAt ? new Date(order.createdAt).toLocaleString() : '';
+                    if (step.key === 'confirmed') stepDate = order.confirmedAt ? new Date(order.confirmedAt).toLocaleString() : '';
+                    if (step.key === 'out-for-delivery') stepDate = order.dispatchDate ? new Date(order.dispatchDate).toLocaleString() : '';
+                    if (step.key === 'delivered') stepDate = order.deliveredDate ? new Date(order.deliveredDate).toLocaleString() : '';
+                } else if (index === currentStepIndex && status !== 'delivered' && status !== 'cancelled') {
+                    stepStatus = 'active';
+                }
+                
+                timelineHtml += `
+                    <div class="timeline-step ${stepStatus}">
+                        <div class="step-icon">${step.icon}</div>
+                        <div class="step-content">
+                            <div class="step-title">${step.title}</div>
+                            <div class="step-date">${stepDate || (stepStatus === 'active' ? 'In Progress' : 'Pending')}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            timelineHtml += '</div>';
+            return timelineHtml;
+        }
+        
+        function displayFullOrderDetails(snapshot) {
+            const orderDetailsList = document.getElementById('orderDetailsList');
+            
+            if (snapshot.empty) {
+                orderDetailsList.innerHTML = `<div style="text-align: center; padding: 40px;"><i class="fas fa-box-open" style="font-size: 48px; color: #ff6f2f;"></i><p>No orders found.</p></div>`;
+                return;
+            }
+            
+            let ordersHtml = '';
+            snapshot.forEach((doc) => {
+                const order = doc.data();
+                const orderId = doc.id.slice(-8).toUpperCase();
+                const orderDate = new Date(order.createdAt).toLocaleString();
+                const status = order.status || 'pending';
+                const statusDisplay = getStatusDisplay(status);
+                const deliveryTime = order.deliveryTime || '';
+                
+                ordersHtml += `
+                    <div class="order-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                            <h3 style="color: #ff6f2f;">Order #${orderId}</h3>
+                            <span class="status-badge ${statusDisplay.class}">${statusDisplay.icon} ${statusDisplay.text}</span>
+                        </div>
+                        <div style="font-size: 13px; color: #666; margin: 10px 0;"><i class="far fa-calendar-alt"></i> ${orderDate}</div>
+                        ${deliveryTime ? `<div class="delivery-time-badge"><i class="fas fa-clock"></i> ${deliveryTime}</div>` : ''}
+                        <div style="margin: 12px 0;"><strong>Items:</strong></div>
+                `;
+                order.items.forEach(item => {
+                    ordersHtml += `<div class="order-item-row"><span>${item.name} × ${item.quantity}</span><span>₹${item.subtotal}</span></div>`;
+                });
+                ordersHtml += `<div class="order-detail-line" style="font-weight: bold; border-top: 2px solid #ff6f2f; margin-top: 10px; padding-top: 10px;"><span>Grand Total:</span><span>₹${order.grandTotal}</span></div></div>`;
+            });
+            orderDetailsList.innerHTML = ordersHtml;
+        }
+        
+        function displayTrackingOnly(snapshot) {
+            const orderDetailsList = document.getElementById('orderDetailsList');
+            if (snapshot.empty) {
+                orderDetailsList.innerHTML = `<div style="text-align:center; padding:40px;"><i class="fas fa-truck" style="font-size:48px; color:#ff6f2f;"></i><p>No orders to track.</p></div>`;
+                return;
+            }
+            let ordersHtml = '<div class="tracking-header"><h2 style="color:#ff6f2f;">📦 Track Your Orders</h2></div>';
+            snapshot.forEach((doc) => {
+                const order = doc.data();
+                const orderId = doc.id.slice(-8).toUpperCase();
+                const orderDate = new Date(order.createdAt).toLocaleString();
+                const status = order.status || 'pending';
+                const statusDisplay = getStatusDisplay(status);
+                const deliveryTime = order.deliveryTime || '';
+                ordersHtml += `<div class="order-card"><div style="display:flex; justify-content:space-between;"><h3 style="color:#ff6f2f;">Order #${orderId}</h3><span class="status-badge ${statusDisplay.class}">${statusDisplay.icon} ${statusDisplay.text}</span></div><div style="font-size:13px; margin:10px 0;">${orderDate}</div>${deliveryTime ? `<div class="delivery-time-badge">${deliveryTime}</div>` : ''}${getTrackingTimeline(order)}</div>`;
+            });
+            orderDetailsList.innerHTML = ordersHtml;
+        }
+        
+        function startLiveOrderTracking() {
+            if (!loggedInUser) return;
+            if (ordersUnsubscribe) ordersUnsubscribe();
+            ordersUnsubscribe = db.collection('orders').where('userId', '==', loggedInUser.uid).orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+                const modal = document.getElementById('orderDetailsModal');
+                if (modal && modal.classList.contains('show')) {
+                    if (currentDisplayMode === 'full') displayFullOrderDetails(snapshot);
+                    else displayTrackingOnly(snapshot);
+                }
+            });
+        }
+        
+        // ========== ORDER LINKS ==========
+        document.getElementById('yourOrderLink').addEventListener('click', async (e) => {
+            e.preventDefault();
+            if(!loggedInUser) { showLoginPopup(); return; }
+            currentDisplayMode = 'full';
+            document.getElementById('orderDetailsList').innerHTML = '<div class="loading-spinner">Loading...</div>';
+            document.getElementById('orderDetailsModal').classList.add('show');
+            document.getElementById('backdrop').classList.add('show');
+            startLiveOrderTracking();
+            const ordersSnapshot = await db.collection('orders').where('userId', '==', loggedInUser.uid).orderBy('createdAt', 'desc').get();
+            displayFullOrderDetails(ordersSnapshot);
+        });
+        
+        document.getElementById('trackOrderLink').addEventListener('click', async (e) => {
+            e.preventDefault();
+            if(!loggedInUser) { showLoginPopup(); return; }
+            currentDisplayMode = 'tracking';
+            document.getElementById('orderDetailsList').innerHTML = '<div class="loading-spinner">Loading...</div>';
+            document.getElementById('orderDetailsModal').classList.add('show');
+            document.getElementById('backdrop').classList.add('show');
+            startLiveOrderTracking();
+            const ordersSnapshot = await db.collection('orders').where('userId', '==', loggedInUser.uid).orderBy('createdAt', 'desc').get();
+            displayTrackingOnly(ordersSnapshot);
+        });
+        
+        document.getElementById('supportLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!loggedInUser) { showLoginPopup(); alert('Please login to access support'); return; }
+            showSupportPopup();
+        });
+        
+        document.getElementById('emailSupportBtn').addEventListener('click', showEmailSupport);
+        
+        // Login button for non-logged in users
+        document.getElementById('loginOnlyBtn').addEventListener('click', () => {
+            showLoginPopup();
+        });
+        
+        // ========== AUTH FUNCTIONS ==========
+        window.handleAuth = async function() {
+            const phone = document.getElementById('loginPhone').value.trim();
+            const errorElement = document.getElementById('loginErrorMessage');
+            if (!phone || !/^\d{10}$/.test(phone)) {
+                errorElement.textContent = 'Please enter a valid 10-digit phone number';
+                errorElement.classList.add('show');
+                return;
+            }
+            const userId = `user_${phone}`;
+            const authButton = document.getElementById('authSubmitBtn');
+            const originalText = authButton.textContent;
+            authButton.textContent = 'Please wait...';
+            authButton.disabled = true;
+            errorElement.classList.remove('show');
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                if (currentAuthMode === 'login') {
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        const userForStorage = { uid: userId, name: userData.name, phone: phone, profileImage: userData.profileImage || null };
+                        localStorage.setItem('quickmart_user', JSON.stringify(userForStorage));
+                        loggedInUser = userForStorage;
+                        closeLoginPopup();
+                        updateProfileUI();
+                        startLiveOrderTracking();
+                        toggleDropdownVisibility();
+                        alert(`Welcome back, ${userData.name}!`);
+                    } else {
+                        errorElement.textContent = 'Account not found. Please sign up first.';
+                        errorElement.classList.add('show');
+                        setAuthMode('signup');
+                    }
+                } else {
+                    const name = document.getElementById('signupName').value.trim();
+                    let profileImageBase64 = window.optimizedProfileImageData;
+                    
+                    if (!profileImageBase64) {
+                        const profileImageFile = document.getElementById('profileImageInput').files[0];
+                        if (!profileImageFile) {
+                            errorElement.textContent = 'Profile picture is required';
+                            errorElement.classList.add('show');
+                            authButton.textContent = originalText;
+                            authButton.disabled = false;
+                            return;
+                        }
+                        profileImageBase64 = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                const img = new Image();
+                                img.onload = function() {
+                                    const canvas = document.createElement('canvas');
+                                    const ctx = canvas.getContext('2d');
+                                    let width = img.width, height = img.height;
+                                    const maxDim = 800;
+                                    if (width > maxDim) { height = (height * maxDim) / width; width = maxDim; }
+                                    if (height > maxDim) { width = (width * maxDim) / height; height = maxDim; }
+                                    canvas.width = width; canvas.height = height;
+                                    ctx.drawImage(img, 0, 0, width, height);
+                                    resolve(canvas.toDataURL('image/jpeg', 0.5));
+                                };
+                                img.src = e.target.result;
+                            };
+                            reader.readAsDataURL(profileImageFile);
+                        });
+                    }
+                    
+                    if (!name) { errorElement.textContent = 'Please enter your full name'; errorElement.classList.add('show'); authButton.textContent = originalText; authButton.disabled = false; return; }
+                    if (!profileImageBase64) { errorElement.textContent = 'Profile picture is required'; errorElement.classList.add('show'); authButton.textContent = originalText; authButton.disabled = false; return; }
+                    if (userDoc.exists) {
+                        errorElement.textContent = 'Account already exists. Please login instead.';
+                        errorElement.classList.add('show');
+                        setAuthMode('login');
+                    } else {
+                        await db.collection('users').doc(userId).set({ uid: userId, name: name, phone: phone, profileImage: profileImageBase64, createdAt: new Date().toISOString() });
+                        const userForStorage = { uid: userId, name: name, phone: phone, profileImage: profileImageBase64 };
+                        localStorage.setItem('quickmart_user', JSON.stringify(userForStorage));
+                        loggedInUser = userForStorage;
+                        closeLoginPopup();
+                        updateProfileUI();
+                        startLiveOrderTracking();
+                        toggleDropdownVisibility();
+                        alert(`Welcome ${name}! Account created successfully.`);
+                    }
+                }
+            } catch (error) {
+                errorElement.textContent = 'An error occurred. Please try again.';
+                errorElement.classList.add('show');
+            } finally {
+                authButton.textContent = originalText;
+                authButton.disabled = false;
+            }
+        };
+
+        window.handleLogout = function() {
+            if (ordersUnsubscribe) ordersUnsubscribe();
+            loggedInUser = null;
+            localStorage.removeItem('quickmart_user');
+            updateProfileUI();
+            toggleDropdownVisibility();
+            closeAllModals();
+        };
+
+        function updateProfileUI() {
+            const nameSpan = document.getElementById('profileNameDisplay');
+            const picDisplay = document.getElementById('profilePicDisplay');
+            if (loggedInUser) {
+                nameSpan.textContent = loggedInUser.name || 'User';
+                if (loggedInUser.profileImage) picDisplay.innerHTML = `<img src="${loggedInUser.profileImage}">`;
+                else picDisplay.innerHTML = `<span style="color:white; font-weight:bold;">${(loggedInUser.name || 'U').charAt(0).toUpperCase()}</span>`;
+            } else {
+                nameSpan.textContent = 'Login';
+                picDisplay.innerHTML = '<i class="fas fa-user"></i>';
+            }
+        }
+
+        function showLoginPopup() {
+            setAuthMode('login');
+            document.getElementById('loginPopup').classList.add('show');
+            document.getElementById('backdrop').classList.add('show');
+        }
+
+        window.closeLoginPopup = function() {
+            document.getElementById('loginPopup').classList.remove('show');
+            document.getElementById('backdrop').classList.remove('show');
+            document.getElementById('loginPhone').value = '';
+            document.getElementById('signupName').value = '';
+            document.getElementById('profilePreview').innerHTML = '<i class="fas fa-camera"></i>';
+            document.getElementById('profileImageInput').value = '';
+            document.getElementById('loginErrorMessage').classList.remove('show');
+            window.optimizedProfileImageData = null;
+        };
+
+        document.getElementById('logoutLink').addEventListener('click', (e) => { e.preventDefault(); if (loggedInUser) handleLogout(); });
+
+        window.showCheckoutForm = function() {
+            if (!loggedInUser) { showLoginPopup(); return; }
+            if (cart.length === 0) { alert('Your cart is empty'); return; }
+            const { subtotal, handlingCharge, smallCartCharge, deliveryCharge, grandTotal } = window.currentCartCharges || calculateChargesByTotal(cart.reduce((s,i)=>s+i.price*i.quantity,0));
+            document.getElementById('deliveryName').value = loggedInUser.name || '';
+            document.getElementById('deliveryPhone').value = loggedInUser.phone || '';
+            let summaryHtml = '';
+            cart.forEach(item => { summaryHtml += `<div class="summary-item"><span>${item.name} x ${item.quantity}</span><span>₹${item.price * item.quantity}</span></div>`; });
+            document.getElementById('summaryItems').innerHTML = summaryHtml;
+            document.getElementById('subtotal').innerHTML = `Subtotal: ₹${subtotal}`;
+            let chargesHtml = '';
+            if (handlingCharge > 0) chargesHtml += `<div class="charge-item">Handling Charge: ₹${handlingCharge}</div>`;
+            if (smallCartCharge > 0) chargesHtml += `<div class="charge-item">Small Cart Charge: ₹${smallCartCharge}</div>`;
+            if (deliveryCharge > 0) chargesHtml += `<div class="charge-item">Delivery Charge: ₹${deliveryCharge}</div>`;
+            document.getElementById('charges').innerHTML = chargesHtml;
+            document.getElementById('grandTotal').innerHTML = `Grand Total: ₹${grandTotal}`;
+            document.getElementById('checkoutModal').classList.add('show');
+            document.getElementById('backdrop').classList.add('show');
+            document.getElementById('cartSidebar').classList.remove('open');
+        };
+
+        // ===============================================
+        // 📧 UPDATED PLACE ORDER FUNCTION WITH TRANSACTIONAL EMAILS
+        // ✅ REPLACES EMAILJS WITH BACKEND NODEMAILER
+        // ===============================================
+        window.placeOrder = async function() {
+            if (!loggedInUser) { 
+                alert('Please login first'); 
+                showLoginPopup(); 
+                return; 
+            }
+            
+            const name = document.getElementById('deliveryName').value.trim();
+            const phone = document.getElementById('deliveryPhone').value.trim();
+            const email = document.getElementById('deliveryEmail').value.trim();
+            const address = document.getElementById('deliveryAddress').value.trim();
+            const landmark = document.getElementById('deliveryLandmark').value.trim();
+            const houseNo = document.getElementById('deliveryHouseNo').value.trim();
+            const city = document.getElementById('deliveryCity').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            if (!name || !phone || !email || !address || !landmark || !houseNo || !paymentMethod) { 
+                alert('Please fill all fields'); 
+                return; 
+            }
+            
+            if (!/^\d{10}$/.test(phone)) { 
+                alert('Valid 10-digit phone required'); 
+                return; 
+            }
+            
+            if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                alert('Please enter a valid email address for order confirmation');
+                return;
+            }
+            
+            const placeButton = document.querySelector('.place-order-btn');
+            const originalText = placeButton.textContent;
+            placeButton.textContent = 'Placing Order...';
+            placeButton.disabled = true;
+            
+            try {
+                const subtotal = cart.reduce((s,i) => s + i.price * i.quantity, 0);
+                const { handlingCharge, smallCartCharge, deliveryCharge } = calculateChargesByTotal(subtotal);
+                const grandTotal = subtotal + handlingCharge + smallCartCharge + deliveryCharge;
+                
+                const orderData = {
+                    userId: loggedInUser.uid,
+                    userInfo: { name, phone, email },
+                    deliveryInfo: { address, landmark, houseNo, city },
+                    items: cart.map(i => ({ 
+                        id: i.id, 
+                        name: i.name, 
+                        price: i.price, 
+                        quantity: i.quantity, 
+                        subtotal: i.price * i.quantity 
+                    })),
+                    charges: { handlingCharge, smallCartCharge, deliveryCharge },
+                    subtotal,
+                    grandTotal,
+                    paymentMethod,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save order to Firestore
+                const orderRef = await db.collection('orders').add(orderData);
+                const orderId = orderRef.id.slice(-8).toUpperCase();
+                
+                // ===============================================
+                // 📧 SEND TRANSACTIONAL EMAILS VIA BACKEND API
+                // ===============================================
+                await sendOrderConfirmationEmails(orderData, orderId);
+                
+                // Clear cart and show success
+                cart = [];
+                updateCartUI();
+                closeCheckoutModal();
+                document.getElementById('successModal').classList.add('show');
+                document.getElementById('backdrop').classList.add('show');
+                
+                // Update success message with email confirmation
+                const successSubMsg = document.querySelector('.success-submessage');
+                if (successSubMsg) {
+                    successSubMsg.innerHTML = `A confirmation email has been sent to ${email}<br>Order #${orderId}`;
+                }
+                
+                alert(`✅ Order placed successfully! Confirmation sent to ${email}`);
+                
+            } catch (error) {
+                console.error('Order placement error:', error);
+                alert('Error placing order: ' + error.message);
+            } finally {
+                placeButton.textContent = originalText;
+                placeButton.disabled = false;
+            }
+        };
+
+        window.closeCheckoutModal = function() { document.getElementById('checkoutModal').classList.remove('show'); document.getElementById('backdrop').classList.remove('show'); };
+        window.closeSuccessModal = function() { document.getElementById('successModal').classList.remove('show'); document.getElementById('backdrop').classList.remove('show'); };
+        window.trackOrder = function() { closeSuccessModal(); document.getElementById('trackOrderLink').click(); };
+        window.closeOrderDetailsModal = function() { document.getElementById('orderDetailsModal').classList.remove('show'); document.getElementById('backdrop').classList.remove('show'); };
+        window.closeAllModals = function() { document.querySelectorAll('.show').forEach(el=>el.classList.remove('show')); closeLoginPopup(); closeImageModal(); closeCheckoutModal(); closeSuccessModal(); closeOrderDetailsModal(); closeSupportPopup(); document.getElementById('cartSidebar').classList.remove('open'); };
+
+        // Admin Functions
+        function openAdminLogin() { document.getElementById('adminLoginModal').classList.add('show'); document.getElementById('backdrop').classList.add('show'); }
+        function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.remove('show'); document.getElementById('backdrop').classList.remove('show'); document.getElementById('adminPassword').value = ''; }
+        window.verifyAdminLogin = function() { if (document.getElementById('adminPassword').value === 'Keimah@2026') { isAdminLoggedIn = true; closeAdminLoginModal(); document.getElementById('adminPanel').classList.add('show'); document.getElementById('backdrop').classList.add('show'); loadAllOrdersForAdmin(); } else alert('Incorrect password!'); };
+        function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('show'); document.getElementById('backdrop').classList.remove('show'); }
+        async function loadAllOrdersForAdmin() { const adminOrdersList = document.getElementById('adminOrdersList'); adminOrdersList.innerHTML = '<div class="loading-spinner">Loading...</div>'; try { const snapshot = await db.collection('orders').orderBy('createdAt','desc').get(); allOrdersData = []; snapshot.forEach(doc=>allOrdersData.push({id:doc.id,...doc.data()})); displayAdminOrders(allOrdersData); } catch(e){ adminOrdersList.innerHTML = `<div style="color:red;">Error: ${e.message}</div>`; } }
+        function displayAdminOrders(orders) { const container = document.getElementById('adminOrdersList'); if(!orders.length){ container.innerHTML='<div style="text-align:center;">No orders</div>'; return; } let html=''; orders.forEach(order=>{ const orderId=order.id.slice(-8).toUpperCase(); const status=order.status||'pending'; const sd=getStatusDisplay(status); html+=`<div class="admin-order-item"><div class="admin-order-header"><div><strong>#${orderId}</strong><br><small>${new Date(order.createdAt).toLocaleString()}</small></div><span class="status-badge ${sd.class}">${sd.icon} ${sd.text}</span></div><div><strong>${order.userInfo.name}</strong> | ${order.userInfo.phone}</div><div>${order.deliveryInfo.address}</div><div style="margin:10px 0;">${order.items.map(i=>`${i.name} x${i.quantity}`).join(', ')}</div><div><strong>Total: ₹${order.grandTotal}</strong></div><div><select id="status-${order.id}" class="admin-status-select"><option value="pending" ${status==='pending'?'selected':''}>Pending</option><option value="confirmed" ${status==='confirmed'?'selected':''}>Confirmed</option><option value="out-for-delivery" ${status==='out-for-delivery'?'selected':''}>Out for Delivery</option><option value="delivered" ${status==='delivered'?'selected':''}>Delivered</option><option value="cancelled" ${status==='cancelled'?'selected':''}>Cancelled</option></select><button class="admin-update-btn" onclick="updateOrderStatus('${order.id}')">Update</button></div><div style="margin-top:10px;"><select id="delivery-time-${order.id}" class="admin-delivery-select">${['Deliver in 5 Minutes','Deliver in 10 Minutes','Deliver in 15 Minutes','Deliver in 20 Minutes','Deliver in 30 Minutes','Deliver in 40 Minutes','Deliver in 50 Minutes','Deliver in 55 Minutes'].map(t=>`<option value="${t}" ${order.deliveryTime===t?'selected':''}>${t}</option>`).join('')}</select><button class="admin-delivery-btn" onclick="updateDeliveryTime('${order.id}')">Update Delivery</button></div></div>`; }); container.innerHTML=html; }
+        window.updateOrderStatus = async function(orderId){ const newStatus=document.getElementById(`status-${orderId}`).value; await db.collection('orders').doc(orderId).update({status:newStatus,lastUpdated:new Date().toISOString()}); alert('Status updated'); loadAllOrdersForAdmin(); };
+        window.updateDeliveryTime = async function(orderId){ const newTime=document.getElementById(`delivery-time-${orderId}`).value; await db.collection('orders').doc(orderId).update({deliveryTime:newTime,lastUpdated:new Date().toISOString()}); alert(`Delivery time: ${newTime}`); loadAllOrdersForAdmin(); };
+        window.filterAdminOrders = function(){ const term=document.getElementById('adminSearchInput').value.trim().toLowerCase(); if(!term) displayAdminOrders(allOrdersData); else displayAdminOrders(allOrdersData.filter(o=>o.userInfo.name.toLowerCase().includes(term)||o.userInfo.phone.includes(term))); };
+        window.clearAdminSearch = function(){ document.getElementById('adminSearchInput').value=''; displayAdminOrders(allOrdersData); };
+        document.getElementById('adminTriggerArea').addEventListener('dblclick',()=>openAdminLogin());
+        document.addEventListener('keydown',(e)=>{ if(e.ctrlKey&&e.shiftKey&&e.key==='A'){ e.preventDefault(); openAdminLogin(); } });
+        
+        // ========== ADMIN PAGE ACCESS VIA /admin URL ==========
+        if (window.location.pathname === '/admin' || window.location.pathname.endsWith('/admin') || window.location.hash === '#admin') {
+            setTimeout(() => {
+                openAdminLogin();
+            }, 500);
+        }
+
+        // Initialize
+        renderProducts(products);
+        updateCartUI();
+        updateProfileUI();
+        toggleDropdownVisibility();
+        if (loggedInUser) startLiveOrderTracking();
+    </script>
+</body>
+</html>
