@@ -40,12 +40,20 @@
             margin-bottom: 8px;
         }
 
-        /* Logo Styles */
+        /* Logo Styles - UPDATED with white background shape */
         .logo-container {
             display: flex;
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            background-color: #ffffff;
+            padding: 6px 18px 6px 12px;
+            border-radius: 60px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+        .logo-container:hover {
+            transform: scale(1.02);
         }
         .logo-icon {
             width: 40px;
@@ -78,7 +86,7 @@
             justify-content: space-between;
         }
 
-        /* Login section - left side */
+        /* Login section - left side - NEW DIFFERENT COLOR (Deep Slate Blue) */
         .login-section {
             display: flex;
             align-items: center;
@@ -88,12 +96,17 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: white;
+            background: #2C3E50;  /* Dark slate blue - different color */
             padding: 5px 12px 5px 8px;
             border-radius: 40px;
             cursor: pointer;
-            border: 1px solid #ddd;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .profile-login:hover {
+            background: #1A2A3A;
+            transform: translateY(-1px);
         }
         .profile-pic {
             width: 32px;
@@ -122,6 +135,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: 0.85rem;
+            color: white;
         }
         .profile-dropdown {
             position: relative;
@@ -157,10 +171,10 @@
             display: block;
         }
 
-        /* Cart Icon - Right side */
+        /* Cart Icon - Right side - NEW DIFFERENT COLOR (Warm Coral/Orange) */
         .cart-icon-header {
-            background: #87CEEB;
-            color: #1e1e2f;
+            background: #FF6B4A;  /* Vibrant coral/orange - different color */
+            color: white;
             padding: 8px 16px;
             border-radius: 40px;
             font-size: 0.9rem;
@@ -171,10 +185,15 @@
             border: none;
             position: relative;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(135, 206, 235, 0.3);
+            box-shadow: 0 2px 8px rgba(255, 107, 74, 0.3);
+            transition: all 0.2s ease;
+        }
+        .cart-icon-header:hover {
+            background: #E55A3A;
+            transform: translateY(-1px);
         }
         .cart-count {
-            background: #5ba3c7;
+            background: #c0392b;
             color: white;
             border-radius: 50%;
             padding: 2px 6px;
@@ -186,6 +205,7 @@
         }
         .cart-text-small {
             font-size: 0.75rem;
+            color: white;
         }
 
         /* Hide old cart wrapper */
@@ -1258,7 +1278,7 @@
 </head>
 <body>
     <header class="top-header">
-        <!-- Row 1: Logo centered -->
+        <!-- Row 1: Logo centered - NOW WITH WHITE BACKGROUND SHAPE -->
         <div class="logo-row">
             <div class="logo-container" onclick="window.location.reload()">
                 <div class="logo-icon">
@@ -1270,9 +1290,9 @@
             </div>
         </div>
         
-        <!-- Row 2: Login button on left, Cart icon on right -->
+        <!-- Row 2: Login button on left, Cart icon on right - NEW COLORS APPLIED -->
         <div class="action-row">
-            <!-- Login button - Left side -->
+            <!-- Login button - Left side - Now Dark Slate Blue -->
             <div class="login-section">
                 <div class="profile-dropdown" id="profileDropdown" style="display: none;">
                     <div class="profile-login" id="profileLoginBtn">
@@ -1298,7 +1318,7 @@
                 </div>
             </div>
             
-            <!-- Cart Icon - Right side -->
+            <!-- Cart Icon - Right side - Now Vibrant Coral/Orange -->
             <button class="cart-icon-header" id="openCartBtn">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-text-small" id="cartItemsText">Items 0</span>
@@ -1626,8 +1646,6 @@
 
     <div class="admin-trigger-area" id="adminTriggerArea" title="Double-click for admin access"></div>
 
-   
-
     <script>
         // ===============================================
         // FIREBASE CONFIGURATION
@@ -1650,7 +1668,6 @@
         // ===============================================
         
         let products = [
-            // MIZOMINUTE SPECIAL SECTION (20 products) - indices 0 to 19
             { id:1, name:"Mizo Special Combo", description:"Best seller combo pack", price:499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075727/Lays_uaiokk.jpg", tag:"MizoMinute" },
             { id:2, name:"Weekend Party Pack", description:"Party essentials", price:699, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075800/KurKure_bpnkl8.jpg", tag:"MizoMinute" },
             { id:3, name:"Family Dinner Pack", description:"Complete family meal", price:899, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075852/Pringles_Original_pz2loz.jpg", tag:"MizoMinute" },
@@ -2002,7 +2019,7 @@
                                                 <tr style="background-color: #fff0e8; border-top: 2px solid #87CEEB;">
                                                     <td colspan="2" style="padding: 12px; text-align: right;"><strong>Grand Total:</strong></td>
                                                     <td style="padding: 12px; text-align: right;"><strong style="color: #87CEEB;">₹${orderData.grandTotal}</strong></td>
-                                                </tr>
+                                                 </tr>
                                             </tfoot>
                                         </table>
                                         
@@ -2681,7 +2698,7 @@
 
         window.closeImageModal = function() {
             document.getElementById('imageModal').classList.remove('show');
-            document.getElementById('backdrop').classlist.remove('show');
+            document.getElementById('backdrop').classList.remove('show');
             currentProductId = null;
         };
 
