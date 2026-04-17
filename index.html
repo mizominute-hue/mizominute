@@ -9,9 +9,6 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <!-- =============================================== -->
-    <!-- ✅ EMAILJS REMOVED - REPLACED WITH BACKEND NODEMAILER -->
-    <!-- =============================================== -->
     <style>
         * {
             margin: 0;
@@ -26,46 +23,90 @@
         }
 
         .top-header {
-            background: white;
+            background: #f5f5f5;  /* White smoke background */
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            padding: 0.6rem 1.5rem;
+            padding: 0.6rem 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        /* Logo section - top row */
+        .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        /* Logo Styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #87CEEB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon i {
+            font-size: 22px;
+            color: white;
+        }
+        .brand-mizo {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #87CEEB;
+        }
+        .brand-minute {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #1e1e2f;
+        }
+
+        /* Bottom row - Login on left, Cart on right */
+        .action-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #ff6f2f20;
         }
 
-        .header-left {
+        /* Login section - left side */
+        .login-section {
             display: flex;
             align-items: center;
-            gap: 15px;
         }
 
         .profile-login {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: #f0f2f5;
-            padding: 5px 15px 5px 8px;
+            gap: 8px;
+            background: white;
+            padding: 5px 12px 5px 8px;
             border-radius: 40px;
             cursor: pointer;
             border: 1px solid #ddd;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .profile-pic {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
             overflow: hidden;
         }
         .profile-pic img {
@@ -80,6 +121,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 0.85rem;
         }
         .profile-dropdown {
             position: relative;
@@ -92,7 +134,7 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             border-radius: 16px;
             z-index: 1;
-            top: 50px;
+            top: 45px;
             left: 0;
             border: 1px solid #eee;
         }
@@ -101,39 +143,38 @@
             padding: 12px 16px;
             text-decoration: none;
             display: block;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
         }
         .dropdown-content a i {
             width: 24px;
-            color: #ff6f2f;
+            color: #87CEEB;
         }
         .dropdown-content a:hover {
-            background: #fff0e8;
+            background: #e6f3ff;
         }
         .profile-dropdown:hover .dropdown-content {
             display: block;
         }
 
-        /* Cart icon - smaller Blinkit style */
-        .cart-icon {
-            background: #ffc107;
+        /* Cart Icon - Right side */
+        .cart-icon-header {
+            background: #87CEEB;
             color: #1e1e2f;
             padding: 8px 16px;
             border-radius: 40px;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             cursor: pointer;
             border: none;
             position: relative;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
-            z-index: 101;
+            box-shadow: 0 2px 8px rgba(135, 206, 235, 0.3);
         }
         .cart-count {
-            background: #ff6f2f;
+            background: #5ba3c7;
             color: white;
             border-radius: 50%;
             padding: 2px 6px;
@@ -143,11 +184,13 @@
             right: -8px;
             font-weight: bold;
         }
-        .cart-text {
+        .cart-text-small {
             font-size: 0.75rem;
-            background: rgba(0,0,0,0.1);
-            padding: 2px 8px;
-            border-radius: 30px;
+        }
+
+        /* Hide old cart wrapper */
+        .cart-button-wrapper {
+            display: none;
         }
 
         .search-container {
@@ -164,7 +207,7 @@
             border: 1px solid #f0f0f5;
         }
         .search-box i {
-            color: #ff6f2f;
+            color: #87CEEB;
             font-size: 1.2rem;
             margin-right: 10px;
         }
@@ -176,7 +219,7 @@
             padding: 0.5rem 0;
         }
         .search-box button {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -199,7 +242,7 @@
         }
         .slider-title {
             font-weight: 600;
-            color: #ff6f2f;
+            color: Tomato;
         }
         .slide-arrow-left, .slide-arrow-right {
             position: absolute;
@@ -215,9 +258,9 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             cursor: pointer;
             z-index: 15;
-            border: 1px solid #ff6f2f40;
+            border: 1px solid #87ceeb40;
             transition: 0.2s;
-            color: #ff6f2f;
+            color: #87CEEB;
             font-size: 1.3rem;
         }
         .slide-arrow-left {
@@ -227,7 +270,7 @@
             right: 0px;
         }
         .slide-arrow-left:hover, .slide-arrow-right:hover {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
         }
         .slide-track-wrapper {
@@ -248,6 +291,64 @@
             padding: 0.8rem;
             border: 1px solid #f0f0f5;
             position: relative;
+        }
+        .gift-card {
+            flex: 0 0 170px;
+            background: white;
+            border-radius: 20px;
+            padding: 0.8rem;
+            border: 1px solid #f0f0f5;
+            position: relative;
+        }
+        .gift-image-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            border-radius: 14px;
+            cursor: pointer;
+        }
+        .gift-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .gift-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .gift-nav-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        .gift-prev {
+            left: 5px;
+        }
+        .gift-next {
+            right: 5px;
+        }
+        .image-counter {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
         }
         .product-tag {
             position: absolute;
@@ -281,6 +382,30 @@
             background: #f44336;
             color: #fff;
         }
+        .tag-tobacco {
+            background: #8B4513;
+            color: #fff;
+        }
+        .tag-drinks {
+            background: #00BFFF;
+            color: #fff;
+        }
+        .tag-frozen {
+            background: #00CED1;
+            color: #fff;
+        }
+        .tag-mizo {
+            background: #FF4500;
+            color: #fff;
+        }
+        .tag-mizominute {
+            background: #FFD700;
+            color: #000;
+        }
+        .tag-gift {
+            background: #FF69B4;
+            color: #fff;
+        }
         .slide-card .product-img {
             width: 100%;
             aspect-ratio: 1/1;
@@ -296,7 +421,7 @@
         .price { font-weight: 700; }
         .price::before { content: '₹'; }
         .add-btn {
-            background: #ff6f2f;
+            background: #87CEEB;
             border: none;
             color: white;
             font-weight: 600;
@@ -390,7 +515,7 @@
             font-family: inherit;
         }
         .comment-form button {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -412,7 +537,7 @@
             padding: 10px;
             border-radius: 12px;
             margin-bottom: 8px;
-            border-left: 3px solid #ff6f2f;
+            border-left: 3px solid #87CEEB;
             display: flex;
             gap: 10px;
         }
@@ -421,7 +546,7 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
-            background: #ff6f2f;
+            background: #87CEEB;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -448,7 +573,7 @@
         }
         .comment-name { 
             font-weight: bold; 
-            color: #ff6f2f;
+            color: Black;
         }
         .comment-date {
             font-size: 0.7rem;
@@ -459,7 +584,6 @@
             word-wrap: break-word;
         }
 
-        /* Login Popup - Updated with White Thunder Lightning inside Orange Circle logo */
         .login-popup {
             display: none;
             position: fixed;
@@ -485,27 +609,26 @@
         .login-logo {
             width: 55px;
             height: 55px;
-            background: #ff6f2f;
+            background: #87CEEB;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(255, 111, 47, 0.3);
+            box-shadow: 0 4px 12px rgba(135, 206, 235, 0.3);
         }
         .login-logo i {
             font-size: 32px;
             color: #ffffff;
-            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
         }
-        .brand-mizo {
+        .brand-mizo-pop {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #87CEEB;
+        }
+        .brand-minute-pop {
             font-size: 2rem;
             font-weight: 700;
             color: black;
-        }
-        .brand-minute {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ff6f2f;
         }
         .auth-toggle-buttons {
             display: flex;
@@ -515,17 +638,16 @@
         .auth-toggle-btn {
             flex: 1;
             padding: 12px;
-            border: 2px solid #ff6f2f;
+            border: 2px solid #87CEEB;
             border-radius: 30px;
             background: white;
-            color: #ff6f2f;
+            color: #87CEEB;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
         .auth-toggle-btn.active {
-            background: #ff6f2f;
-            color: white;
+            background: white;
+            color: Black;
         }
         .login-form {
             display: flex;
@@ -542,7 +664,7 @@
             width: 100%;
         }
         .login-form input:focus {
-            border-color: #ff6f2f;
+            border-color: #87CEEB;
         }
         #signupFields input {
             width: 100%;
@@ -563,7 +685,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 3px dashed #ff6f2f;
+            border: 3px dashed #87CEEB;
             cursor: pointer;
             margin: 0 auto;
         }
@@ -586,11 +708,8 @@
             cursor: pointer;
             display: inline-block;
         }
-        .upload-btn:hover {
-            background: #e0e0e0;
-        }
         .login-form button {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
             border: none;
             padding: 14px;
@@ -598,11 +717,10 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
             margin-top: 10px;
         }
         .login-form button:hover {
-            background: #ff5500;
+            background: #5ba3c7;
         }
         .login-form button:disabled {
             background: #ccc;
@@ -615,7 +733,7 @@
             color: #999;
         }
         .close-popup:hover {
-            color: #ff6f2f;
+            color: #87CEEB;
         }
         .error-message {
             color: #dc3545;
@@ -627,7 +745,6 @@
             display: block;
         }
 
-        /* Support Popup */
         .support-popup {
             display: none;
             position: fixed;
@@ -664,12 +781,12 @@
             color: inherit;
         }
         .support-card:hover {
-            border-color: #ff6f2f;
+            border-color: #87CEEB;
             transform: scale(1.02);
         }
         .support-card i {
             font-size: 2.5rem;
-            color: #ff6f2f;
+            color: #87CEEB;
             margin-bottom: 10px;
         }
         .support-card h4 {
@@ -696,7 +813,6 @@
             margin-top: 15px;
         }
 
-        /* Cart Styles */
         .cart-overlay {
             position: fixed;
             top: 0; right: 0;
@@ -717,14 +833,14 @@
             align-items: center;
             margin-bottom: 1rem;
             padding-bottom: 10px;
-            border-bottom: 2px solid #ff6f2f;
+            border-bottom: 2px solid #87CEEB;
         }
         .close-cart {
             background: none;
             border: none;
             font-size: 2rem;
             cursor: pointer;
-            color: #ff6f2f;
+            color: #87CEEB;
         }
         .cart-items {
             flex: 1;
@@ -754,7 +870,7 @@
         }
         .cart-item-price {
             font-size: 0.8rem;
-            color: #ff6f2f;
+            color: #87CEEB;
             font-weight: 600;
         }
         .cart-item-quantity {
@@ -775,12 +891,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
         }
         .qty-btn:hover {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
-            border-color: #ff6f2f;
+            border-color: #87CEEB;
         }
         .qty-number {
             font-weight: 600;
@@ -794,7 +909,7 @@
             text-align: right;
         }
         .cart-footer {
-            border-top: 2px solid #ff6f2f;
+            border-top: 2px solid #87CEEB;
             padding-top: 15px;
             background: white;
         }
@@ -819,10 +934,10 @@
             border-top: 1px dashed #ddd;
             font-weight: 800;
             font-size: 1.1rem;
-            color: #ff6f2f;
+            color: #87CEEB;
         }
         .checkout-btn {
-            background: linear-gradient(135deg, #ff6f2f 0%, #ff5500 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #5ba3c7 100%);
             color: white;
             border: none;
             padding: 14px 20px;
@@ -832,15 +947,13 @@
             cursor: pointer;
             font-weight: 700;
             font-size: 1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(255, 111, 47, 0.3);
+            box-shadow: 0 4px 15px rgba(135, 206, 235, 0.3);
         }
         .checkout-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 111, 47, 0.4);
+            box-shadow: 0 8px 25px rgba(135, 206, 235, 0.4);
         }
 
-        /* Admin Panel Styles */
         .admin-panel {
             display: none;
             position: fixed;
@@ -864,7 +977,7 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #ff6f2f;
+            border-bottom: 2px solid #87CEEB;
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -881,7 +994,7 @@
             outline: none;
         }
         .admin-search-box button {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -910,7 +1023,7 @@
         .admin-status-select {
             padding: 8px 12px;
             border-radius: 8px;
-            border: 1px solid #ff6f2f;
+            border: 1px solid #87CEEB;
             margin-right: 10px;
             font-size: 14px;
             cursor: pointer;
@@ -925,7 +1038,7 @@
             background: white;
         }
         .admin-update-btn {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -986,7 +1099,7 @@
             font-size: 16px;
         }
         .admin-login-modal button {
-            background: #ff6f2f;
+            background: #87CEEB;
             color: white;
             border: none;
             padding: 12px;
@@ -1017,7 +1130,7 @@
         .checkout-modal.show { display: block; }
         .checkout-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
         .checkout-form input, .checkout-form textarea, .checkout-form select { padding: 12px 15px; border: 2px solid #ddd; border-radius: 30px; font-size: 16px; outline: none; width: 100%; }
-        .place-order-btn { background: #ff6f2f; color: white; border: none; padding: 16px; border-radius: 30px; font-weight: 600; cursor: pointer; }
+        .place-order-btn { background: #87CEEB; color: white; border: none; padding: 16px; border-radius: 30px; font-weight: 600; cursor: pointer; }
         .order-summary { background: #f8f9fa; padding: 15px; border-radius: 20px; margin: 10px 0; }
         .success-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 24px; z-index: 1300; width: 90%; max-width: 400px; text-align: center; }
         .success-modal.show { display: block; }
@@ -1028,7 +1141,7 @@
         .tracking-timeline { margin: 20px 0; position: relative; padding: 10px 0; }
         .timeline-step { display: flex; margin-bottom: 20px; position: relative; align-items: flex-start; }
         .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .order-card { background: #f8f9fa; border-radius: 16px; padding: 15px; margin-bottom: 20px; border-left: 4px solid #ff6f2f; }
+        .order-card { background: #f8f9fa; border-radius: 16px; padding: 15px; margin-bottom: 20px; border-left: 4px solid #87CEEB; }
         .status-pending { background: #fff3cd; color: #856404; }
         .status-confirmed { background: #d4edda; color: #155724; }
         .status-out-for-delivery { background: #cce5ff; color: #004085; }
@@ -1050,62 +1163,69 @@
             .cart-overlay { width: 100%; }
             .login-logo { width: 45px; height: 45px; }
             .login-logo i { font-size: 26px; }
-            .brand-mizo, .brand-minute { font-size: 1.5rem; }
+            .brand-mizo-pop, .brand-minute-pop { font-size: 1.5rem; }
             .support-options { flex-direction: column; }
             .admin-header { flex-direction: column; align-items: stretch; }
             
-            /* Mobile: Login button stays in top-left corner */
-            .top-header {
-                padding: 0.5rem 1rem;
-                flex-wrap: wrap;
+            .brand-mizo, .brand-minute {
+                font-size: 1.1rem;
             }
-            .header-left {
-                flex: 1;
-                gap: 10px;
+            
+            .logo-icon {
+                width: 36px;
+                height: 36px;
             }
-            .profile-login {
-                padding: 4px 12px 4px 6px;
+            
+            .logo-icon i {
+                font-size: 20px;
             }
-            .profile-pic {
-                width: 30px;
-                height: 30px;
-                font-size: 1rem;
-            }
-            .profile-name {
-                max-width: 80px;
-                font-size: 0.85rem;
-            }
-            /* Cart icon smaller on mobile */
-            .cart-icon {
+            
+            .cart-icon-header {
                 padding: 6px 12px;
             }
-            .cart-text {
+            
+            .cart-text-small {
                 font-size: 0.7rem;
             }
-            .cart-count {
-                padding: 1px 5px;
-                font-size: 0.65rem;
-                top: -6px;
-                right: -6px;
+            
+            .profile-login {
+                padding: 4px 10px;
+            }
+            
+            .profile-name {
+                font-size: 0.8rem;
+                max-width: 80px;
             }
         }
         
         @media (max-width: 480px) {
-            .profile-name {
-                max-width: 60px;
-                font-size: 0.75rem;
+            .brand-mizo, .brand-minute {
+                font-size: 0.9rem;
             }
-            .cart-text {
+            
+            .logo-icon {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .logo-icon i {
+                font-size: 16px;
+            }
+            
+            .cart-text-small {
                 display: none;
             }
-            .cart-icon {
-                padding: 6px 10px;
+            
+            .cart-icon-header {
+                padding: 8px 12px;
+            }
+            
+            .profile-name {
+                font-size: 0.75rem;
+                max-width: 60px;
             }
         }
         
-        /* =============================================== */
-        /* ✅ EMAIL TOAST NOTIFICATION STYLES */
-        /* =============================================== */
         .email-toast {
             position: fixed;
             bottom: 20px;
@@ -1138,36 +1258,57 @@
 </head>
 <body>
     <header class="top-header">
-        <div class="header-left">
-            <div class="profile-dropdown" id="profileDropdown" style="display: none;">
-                <div class="profile-login" id="profileLoginBtn">
-                    <div class="profile-pic" id="profilePicDisplay">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span class="profile-name" id="profileNameDisplay">Login</span>
-                    <i class="fas fa-chevron-down"></i>
+        <!-- Row 1: Logo centered -->
+        <div class="logo-row">
+            <div class="logo-container" onclick="window.location.reload()">
+                <div class="logo-icon">
+                    <i class="fas fa-bolt"></i>
                 </div>
-                <div class="dropdown-content">
-                    <a href="#" id="yourOrderLink"><i class="fas fa-box"></i> Your Order</a>
-                    <a href="#" id="trackOrderLink"><i class="fas fa-map-marker-alt"></i> Track Order</a>
-                    <a href="#" id="supportLink"><i class="fas fa-headset"></i> Support</a>
-                    <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <div>
+                    <span class="brand-mizo">Mizo</span><span class="brand-minute">Minute</span>
                 </div>
-            </div>
-            <div class="profile-login" id="loginOnlyBtn" style="display: flex;">
-                <div class="profile-pic">
-                    <i class="fas fa-user"></i>
-                </div>
-                <span class="profile-name">Login</span>
-                <i class="fas fa-chevron-down"></i>
             </div>
         </div>
-        <button class="cart-icon" id="openCartBtn">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-text" id="cartItemsText">Items 0</span>
-            <span class="cart-count" id="cartCount">0</span>
-        </button>
+        
+        <!-- Row 2: Login button on left, Cart icon on right -->
+        <div class="action-row">
+            <!-- Login button - Left side -->
+            <div class="login-section">
+                <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                    <div class="profile-login" id="profileLoginBtn">
+                        <div class="profile-pic" id="profilePicDisplay">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="profile-name" id="profileNameDisplay">Login</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-content">
+                        <a href="#" id="yourOrderLink"><i class="fas fa-box"></i> Your Order</a>
+                        <a href="#" id="trackOrderLink"><i class="fas fa-map-marker-alt"></i> Track Order</a>
+                        <a href="#" id="supportLink"><i class="fas fa-headset"></i> Support</a>
+                        <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+                <div class="profile-login" id="loginOnlyBtn" style="display: flex;">
+                    <div class="profile-pic">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="profile-name">Login</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            
+            <!-- Cart Icon - Right side -->
+            <button class="cart-icon-header" id="openCartBtn">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-text-small" id="cartItemsText">Items 0</span>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
     </header>
+
+    <!-- Cart Button Wrapper - Hidden -->
+    <div class="cart-button-wrapper" style="display: none;"></div>
 
     <div class="search-container">
         <div class="search-box">
@@ -1180,17 +1321,20 @@
     <!-- =============================================== -->
     <!-- PRODUCT SECTIONS - START                         -->
     <!-- =============================================== -->
-    <!-- TO ADD/UPDATE PRODUCTS: Modify the 'products' array in the JavaScript section below -->
-    <!-- Each product needs: id, name, description, price, image, tag -->
-    <!-- The sections are automatically populated based on array indices: -->
-    <!-- Snacks: indices 0-19 (20 products) -->
-    <!-- Flowers: indices 20-39 (20 products) -->
-    <!-- Lunch & Dinner: indices 40-69 (30 products) -->
-    <!-- Skincare: indices 70-89 (20 products) -->
-    <!-- Electronics: indices 90-129 (40 products) -->
-    <!-- =============================================== -->
     
-    <!-- Snacks Section (20 products) -->
+    <!-- MizoMinute Special Section - TOP SLIDE -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">⭐ MizoMinute Special</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft0"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight0"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper0">
+            <div class="slide-track" id="slideTrack0"></div>
+        </div>
+    </div>
+    
+    <!-- Snacks Section -->
     <div class="slider-container">
         <div class="slider-header">
             <h3 class="slider-title">🍿 Snacks</h3>
@@ -1202,19 +1346,43 @@
         </div>
     </div>
 
-    <!-- Flowers Section (20 products) -->
+    <!-- Drinks Section -->
     <div class="slider-container">
         <div class="slider-header">
-            <h3 class="slider-title">🌸 Flowers</h3>
+            <h3 class="slider-title">🥤 Drinks</h3>
         </div>
-        <div class="slide-arrow-left" id="slideLeft2"><i class="fas fa-chevron-left"></i></div>
-        <div class="slide-arrow-right" id="slideRight2"><i class="fas fa-chevron-right"></i></div>
-        <div class="slide-track-wrapper" id="slideTrackWrapper2">
-            <div class="slide-track" id="slideTrack2"></div>
+        <div class="slide-arrow-left" id="slideLeft7"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight7"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper7">
+            <div class="slide-track" id="slideTrack7"></div>
         </div>
     </div>
 
-    <!-- Lunch & Dinner Section (30 products) -->
+    <!-- Gift Items Slide (between Drinks and Frozen) -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">🎁 Gift Items</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeftGift"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRightGift"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapperGift">
+            <div class="slide-track" id="slideTrackGift"></div>
+        </div>
+    </div>
+
+    <!-- Frozen Section -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">❄️ Frozen</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft8"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight8"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper8">
+            <div class="slide-track" id="slideTrack8"></div>
+        </div>
+    </div>
+
+    <!-- Lunch & Dinner Section -->
     <div class="slider-container">
         <div class="slider-header">
             <h3 class="slider-title">🍽️ Lunch & Dinner</h3>
@@ -1226,7 +1394,19 @@
         </div>
     </div>
 
-    <!-- Skincare Section (20 products) -->
+    <!-- Flowers Section -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">🌸 Flowers</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft2"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight2"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper2">
+            <div class="slide-track" id="slideTrack2"></div>
+        </div>
+    </div>
+
+    <!-- Skincare Section -->
     <div class="slider-container">
         <div class="slider-header">
             <h3 class="slider-title">💆 Skincare</h3>
@@ -1238,7 +1418,19 @@
         </div>
     </div>
 
-    <!-- Electronics Section (40 products) -->
+    <!-- Mizo Product Section -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">🧺 Mizo Product</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft9"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight9"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper9">
+            <div class="slide-track" id="slideTrack9"></div>
+        </div>
+    </div>
+
+    <!-- Electronics Section -->
     <div class="slider-container">
         <div class="slider-header">
             <h3 class="slider-title">📱 Electronics</h3>
@@ -1250,9 +1442,17 @@
         </div>
     </div>
 
-    <!-- =============================================== -->
-    <!-- PRODUCT SECTIONS - END                           -->
-    <!-- =============================================== -->
+    <!-- Tobacco Section -->
+    <div class="slider-container">
+        <div class="slider-header">
+            <h3 class="slider-title">🚬 Tobacco</h3>
+        </div>
+        <div class="slide-arrow-left" id="slideLeft6"><i class="fas fa-chevron-left"></i></div>
+        <div class="slide-arrow-right" id="slideRight6"><i class="fas fa-chevron-right"></i></div>
+        <div class="slide-track-wrapper" id="slideTrackWrapper6">
+            <div class="slide-track" id="slideTrack6"></div>
+        </div>
+    </div>
 
     <div class="container" style="max-width:1200px; margin:0 auto; padding:0 1rem;">
         <div class="product-grid" id="productGrid"></div>
@@ -1260,7 +1460,7 @@
 
     <div id="adminTrigger" style="position:fixed; bottom:10px; right:10px; width:30px; height:30px; background:transparent;"></div>
 
-    <!-- Login Popup with White Thunder Lightning inside Orange Circle logo -->
+    <!-- Login Popup -->
     <div class="login-popup" id="loginPopup">
         <span class="close-popup" onclick="closeLoginPopup()">&times;</span>
         <div class="login-logo-container">
@@ -1268,13 +1468,13 @@
                 <i class="fas fa-bolt"></i>
             </div>
             <div>
-                <span class="brand-mizo">Mizo</span><span class="brand-minute">Minute</span>
+                <span class="brand-mizo-pop">Mizo</span><span class="brand-minute-pop">Minute</span>
             </div>
         </div>
         <p style="color: #666; margin: 10px 0;" id="loginSubtitle"></p>
         
         <div class="auth-toggle-buttons" id="authToggleButtons">
-            <button class="auth-toggle-btn active" onclick="setAuthMode('login')">Login</button>
+            <button class="auth-toggle-btn active" onclick="setAuthMode('login')">Already a member</button>
             <button class="auth-toggle-btn" onclick="setAuthMode('signup')">Sign Up</button>
         </div>
 
@@ -1296,7 +1496,7 @@
         </div>
     </div>
 
-    <!-- Support Popup - Email and Instagram only -->
+    <!-- Support Popup -->
     <div class="support-popup" id="supportPopup">
         <span class="close-popup" onclick="closeSupportPopup()">&times;</span>
         <h2><i class="fas fa-headset"></i> Support Center</h2>
@@ -1426,9 +1626,11 @@
 
     <div class="admin-trigger-area" id="adminTriggerArea" title="Double-click for admin access"></div>
 
+   
+
     <script>
         // ===============================================
-        // ✅ EMAILJS REMOVED - USING BACKEND NODEMAILER
+        // FIREBASE CONFIGURATION
         // ===============================================
         
         const firebaseConfig = {
@@ -1446,155 +1648,269 @@
         // ===============================================
         // PRODUCTS ARRAY - UPDATE PRODUCTS HERE
         // ===============================================
-        // SECTION MAPPING:
-        // Snacks: indices 0-19 (20 products)
-        // Flowers: indices 20-39 (20 products)  
-        // Lunch & Dinner: indices 40-69 (30 products)
-        // Skincare: indices 70-89 (20 products)
-        // Electronics: indices 90-129 (40 products)
-        // TOTAL: 130 products
-        // ===============================================
         
         let products = [
-            // SNACKS SECTION (20 products) - indices 0 to 19
-            { id:1, name:"Lays Classic Salted", description:"Crispy potato chips", price:20, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075727/Lays_uaiokk.jpg", tag:"Snacks" },
-            { id:2, name:"Kurkure Masala Munch", description:"Crunchy corn snacks", price:20, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075800/KurKure_bpnkl8.jpg", tag:"Snacks" },
-            { id:3, name:"Pringles Original", description:"Stackable potato crisps", price:120, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075852/Pringles_Original_pz2loz.jpg", tag:"Snacks" },
-            { id:4, name:"Doritos Nachos", description:"Cheese flavored tortilla chips", price:70, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075891/Doritos_Nachos_uoaiyy.jpg", tag:"Snacks" },
-            { id:5, name:"Cheetos Puffs", description:"Cheesy puffs", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075924/Cheetos_Puffs_flr3cc.jpg", tag:"Snacks" },
-            { id:6, name:"Maggie Noodles", description:"Masala instant noodles", price:14, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075953/Maggie_Noodles_nte1tp.jpg", tag:"Snacks" },
-            { id:7, name:"Bourbon Biscuit", description:"Chocolate cream biscuits", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075982/Bourbon_Biscuit_i0nfbf.jpg", tag:"Snacks" },
-            { id:8, name:"Oreo Pack", description:"Chocolate sandwich cookies", price:60, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076078/Oreo_Pack_diwlrm.jpg", tag:"Snacks" },
-            { id:9, name:"KitKat", description:"Chocolate wafer bar", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076084/KitKat_laa7n7.jpg", tag:"Snacks" },
-            { id:10, name:"Dairy Milk Silk", description:"Smooth milk chocolate", price:150, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076218/Dairy_Milk_Silk_gvx3bg.jpg", tag:"Snacks" },
-            { id:11, name:"Munch", description:"Chocolate bar", price:10, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076260/munch_wnp5zp.jpg", tag:"Snacks" },
-            { id:12, name:"Parle G", description:"Glucose biscuits", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076402/Parle_G_lbel54.jpg", tag:"Snacks" },
-            { id:13, name:"Hide & Seek", description:"Chocolate chip cookies", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076410/Hide_Seek_ujxokq.jpg", tag:"Snacks" },
-            { id:14, name:"Good Day", description:"Butter cookies", price:35, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076467/Good_Day_bnkfl5.jpg", tag:"Snacks" },
-            { id:15, name:"Dark Fantasy", description:"Choco filled cookies", price:60, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076501/Dark_Fantasy_ux0cjt.jpg", tag:"Snacks" },
-            { id:16, name:"Sunfeast Marie", description:"Light biscuits", price:25, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076608/Sunfeast_Marie_kouvss.jpg", tag:"Snacks" },
-            { id:17, name:"Lotte Choco Pie", description:"Chocolate cream pie", price:110, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076617/Lotte_Choco_Pie_eyzhcp.jpg", tag:"Snacks" },
-            { id:18, name:"Ferrero Rocher", description:"Premium chocolate", price:180, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076711/Ferrero_Rocher_rgodof.jpg", tag:"Snacks" },
-            { id:19, name:"Hershey's", description:"Milk chocolate", price:90, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076942/Bournville_oa5awp.jpg", tag:"Snacks" },
-            { id:20, name:"Bournville", description:"Dark chocolate", price:160, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076881/Hershey_s_h0kf5k.webp", tag:"Snacks" },
+            // MIZOMINUTE SPECIAL SECTION (20 products) - indices 0 to 19
+            { id:1, name:"Mizo Special Combo", description:"Best seller combo pack", price:499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075727/Lays_uaiokk.jpg", tag:"MizoMinute" },
+            { id:2, name:"Weekend Party Pack", description:"Party essentials", price:699, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075800/KurKure_bpnkl8.jpg", tag:"MizoMinute" },
+            { id:3, name:"Family Dinner Pack", description:"Complete family meal", price:899, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075852/Pringles_Original_pz2loz.jpg", tag:"MizoMinute" },
+            { id:4, name:"Date Night Special", description:"Romantic dinner setup", price:1299, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075891/Doritos_Nachos_uoaiyy.jpg", tag:"MizoMinute" },
+            { id:5, name:"Morning Boost", description:"Breakfast combo", price:299, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075924/Cheetos_Puffs_flr3cc.jpg", tag:"MizoMinute" },
+            { id:6, name:"Movie Time Pack", description:"Snacks & drinks", price:449, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075953/Maggie_Noodles_nte1tp.jpg", tag:"MizoMinute" },
+            { id:7, name:"Health Kit", description:"Wellness products", price:599, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075982/Bourbon_Biscuit_i0nfbf.jpg", tag:"MizoMinute" },
+            { id:8, name:"Gaming Combo", description:"Energy drinks + snacks", price:549, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076078/Oreo_Pack_diwlrm.jpg", tag:"MizoMinute" },
+            { id:9, name:"Office Snack Box", description:"Daily office snacks", price:399, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076084/KitKat_laa7n7.jpg", tag:"MizoMinute" },
+            { id:10, name:"Midnight Cravings", description:"Late night special", price:349, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076218/Dairy_Milk_Silk_gvx3bg.jpg", tag:"MizoMinute" },
+            { id:11, name:"Mizo Special Combo 2", description:"Best seller combo pack", price:499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076260/munch_wnp5zp.jpg", tag:"MizoMinute" },
+            { id:12, name:"Weekend Party Pack 2", description:"Party essentials", price:699, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076402/Parle_G_lbel54.jpg", tag:"MizoMinute" },
+            { id:13, name:"Family Dinner Pack 2", description:"Complete family meal", price:899, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076410/Hide_Seek_ujxokq.jpg", tag:"MizoMinute" },
+            { id:14, name:"Date Night Special 2", description:"Romantic dinner setup", price:1299, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076467/Good_Day_bnkfl5.jpg", tag:"MizoMinute" },
+            { id:15, name:"Morning Boost 2", description:"Breakfast combo", price:299, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076501/Dark_Fantasy_ux0cjt.jpg", tag:"MizoMinute" },
+            { id:16, name:"Movie Time Pack 2", description:"Snacks & drinks", price:449, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076608/Sunfeast_Marie_kouvss.jpg", tag:"MizoMinute" },
+            { id:17, name:"Health Kit 2", description:"Wellness products", price:599, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076617/Lotte_Choco_Pie_eyzhcp.jpg", tag:"MizoMinute" },
+            { id:18, name:"Gaming Combo 2", description:"Energy drinks + snacks", price:549, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076711/Ferrero_Rocher_rgodof.jpg", tag:"MizoMinute" },
+            { id:19, name:"Office Snack Box 2", description:"Daily office snacks", price:399, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076942/Bournville_oa5awp.jpg", tag:"MizoMinute" },
+            { id:20, name:"Midnight Cravings 2", description:"Late night special", price:349, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076881/Hershey_s_h0kf5k.webp", tag:"MizoMinute" },
             
-            // FLOWERS SECTION (20 products) - indices 20 to 39
-            { id:21, name:"Red Rose Bouquet", description:"Fresh red roses", price:299, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080603/Red_Rose_Bouquet_lxont9.jpg", tag:"Flowers" },
-            { id:22, name:"Sunflower Bunch", description:"Bright sunflowers", price:249, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080749/Sunflower_Bunch_yl1dnd.jpg", tag:"Flowers" },
-            { id:23, name:"Lily Arrangement", description:"Elegant white lilies", price:399, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080704/Lily_Arrangement_yt37yr.jpg", tag:"Flowers" },
-            { id:24, name:"Tulip Bunch", description:"Colorful tulips", price:349, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080856/Tulip_Bunch_cnpd4f.jpg", tag:"Flowers" },
-            { id:25, name:"Orchid Plant", description:"Exotic orchid", price:449, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081021/Orchid_Plant_urdtkn.jpg", tag:"Flowers" },
-            { id:26, name:"Mixed Flower Bouquet", description:"Assorted fresh flowers", price:379, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081132/Mixed_Flower_Bouquet_t3ywpx.jpg", tag:"Flowers" },
-            { id:27, name:"Carnation Bunch", description:"Pretty carnations", price:199, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081196/Carnation_Bunch_ei8l39.jpg", tag:"Flowers" },
-            { id:28, name:"Daisy Bouquet", description:"Cheerful daisies", price:229, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081262/Daisy_Bouquet_c5fgeb.png", tag:"Flowers" },
-            { id:29, name:"Jasmine Garland", description:"Fragrant jasmine", price:179, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081360/Jasmine_Garland_xyfaj4.jpg", tag:"Flowers" },
-            { id:30, name:"Marigold Bunch", description:"Vibrant marigolds", price:149, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081402/Marigold_Bunch_wqlhka.jpg", tag:"Flowers" },
-            { id:31, name:"Lavender Bouquet", description:"Calming lavender", price:279, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081462/Lavender_Bouquet_vmk3ih.jpg", tag:"Flowers" },
-            { id:32, name:"Peony Bunch", description:"Romantic peonies", price:429, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081540/Peony_Bunch_x9bfu6.jpg", tag:"Flowers" },
-            { id:33, name:"Hydrangea Bouquet", description:"Full hydrangeas", price:389, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081618/Hydrangea_Bouquet_seeej2.jpg", tag:"Flowers" },
-            { id:34, name:"Gerbera Bunch", description:"Colorful gerberas", price:259, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081713/Gerbera_Bunch_slwjkx.jpg", tag:"Flowers" },
-            { id:35, name:"Chrysanthemum", description:"Floral chrysanthemums", price:189, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081779/Chrysanthemum_lnu1le.jpg", tag:"Flowers" },
-            { id:36, name:"Baby Breath", description:"Delicate filler flowers", price:129, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081855/Baby_Breath_jspby9.jpg", tag:"Flowers" },
-            { id:37, name:"Gladiolus", description:"Tall elegant flowers", price:219, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081911/Gerbera_Bunch_coxfch.jpg", tag:"Flowers" },
-            { id:38, name:"Iris Bouquet", description:"Beautiful irises", price:289, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082046/Iris_Bouquet_hzq1uu.jpg", tag:"Flowers" },
-            { id:39, name:"Dahlia Bunch", description:"Stunning dahlias", price:319, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082123/Dahlia_Bunch_r10rln.jpg", tag:"Flowers" },
-            { id:40, name:"Zinnia Bouquet", description:"Vibrant zinnias", price:239, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082202/Zinnia_Bouquet_b0ma7s.jpg", tag:"Flowers" },
+            // SNACKS SECTION (20 products) - indices 20 to 39
+            { id:21, name:"Lays Classic Salted", description:"Crispy potato chips", price:20, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075727/Lays_uaiokk.jpg", tag:"Snacks" },
+            { id:22, name:"Kurkure Masala Munch", description:"Crunchy corn snacks", price:20, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075800/KurKure_bpnkl8.jpg", tag:"Snacks" },
+            { id:23, name:"Pringles Original", description:"Stackable potato crisps", price:120, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075852/Pringles_Original_pz2loz.jpg", tag:"Snacks" },
+            { id:24, name:"Doritos Nachos", description:"Cheese flavored tortilla chips", price:70, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075891/Doritos_Nachos_uoaiyy.jpg", tag:"Snacks" },
+            { id:25, name:"Cheetos Puffs", description:"Cheesy puffs", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075924/Cheetos_Puffs_flr3cc.jpg", tag:"Snacks" },
+            { id:26, name:"Maggie Noodles", description:"Masala instant noodles", price:14, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075953/Maggie_Noodles_nte1tp.jpg", tag:"Snacks" },
+            { id:27, name:"Bourbon Biscuit", description:"Chocolate cream biscuits", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776075982/Bourbon_Biscuit_i0nfbf.jpg", tag:"Snacks" },
+            { id:28, name:"Oreo Pack", description:"Chocolate sandwich cookies", price:60, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076078/Oreo_Pack_diwlrm.jpg", tag:"Snacks" },
+            { id:29, name:"KitKat", description:"Chocolate wafer bar", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076084/KitKat_laa7n7.jpg", tag:"Snacks" },
+            { id:30, name:"Dairy Milk Silk", description:"Smooth milk chocolate", price:150, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076218/Dairy_Milk_Silk_gvx3bg.jpg", tag:"Snacks" },
+            { id:31, name:"Munch", description:"Chocolate bar", price:10, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076260/munch_wnp5zp.jpg", tag:"Snacks" },
+            { id:32, name:"Parle G", description:"Glucose biscuits", price:30, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076402/Parle_G_lbel54.jpg", tag:"Snacks" },
+            { id:33, name:"Hide & Seek", description:"Chocolate chip cookies", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076410/Hide_Seek_ujxokq.jpg", tag:"Snacks" },
+            { id:34, name:"Good Day", description:"Butter cookies", price:35, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076467/Good_Day_bnkfl5.jpg", tag:"Snacks" },
+            { id:35, name:"Dark Fantasy", description:"Choco filled cookies", price:60, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076501/Dark_Fantasy_ux0cjt.jpg", tag:"Snacks" },
+            { id:36, name:"Sunfeast Marie", description:"Light biscuits", price:25, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076608/Sunfeast_Marie_kouvss.jpg", tag:"Snacks" },
+            { id:37, name:"Lotte Choco Pie", description:"Chocolate cream pie", price:110, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076617/Lotte_Choco_Pie_eyzhcp.jpg", tag:"Snacks" },
+            { id:38, name:"Ferrero Rocher", description:"Premium chocolate", price:180, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076711/Ferrero_Rocher_rgodof.jpg", tag:"Snacks" },
+            { id:39, name:"Hershey's", description:"Milk chocolate", price:90, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076942/Bournville_oa5awp.jpg", tag:"Snacks" },
+            { id:40, name:"Bournville", description:"Dark chocolate", price:160, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776076881/Hershey_s_h0kf5k.webp", tag:"Snacks" },
             
-            // LUNCH & DINNER SECTION (30 products) - indices 40 to 69
-            { id:41, name:"Chicken Biryani", description:"Aromatic rice with chicken", price:250, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082667/Chicken_Biryani_wu4h7l.jpg", tag:"Meal" },
-            { id:42, name:"Veg Thali", description:"Complete vegetarian meal", price:180, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082377/veg-thali_mfdwys.jpg", tag:"Meal" },
-            { id:43, name:"Butter Chicken", description:"Creamy tomato curry", price:320, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082369/Butter_Chicken_amovgn.jpg", tag:"Meal" },
-            { id:44, name:"Paneer Butter Masala", description:"Cottage cheese in rich gravy", price:280, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082768/Paneer_Butter_Masala_ggf6wd.jpg", tag:"Meal" },
-            { id:45, name:"Dal Makhani", description:"Creamy black lentils", price:220, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082858/Dal_Makhani_wyilpn.jpg", tag:"Meal" },
-            { id:46, name:"Naan Bread", description:"Freshly baked bread", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082965/Naan_Bread_ypzvvm.jpg", tag:"Meal" },
-            { id:47, name:"Chicken Fried Rice", description:"Chinese style fried rice", price:210, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083033/Chicken_Fried_Rice_guofi9.jpg", tag:"Meal" },
-            { id:48, name:"Veg Noodles", description:"Indo-Chinese noodles", price:150, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Meal" },
-            { id:49, name:"Chili Chicken", description:"Spicy chicken appetizer", price:260, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Meal" },
-            { id:50, name:"Veg Manchurian", description:"Vegetable balls in sauce", price:190, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Meal" },
-            { id:51, name:"Tandoori Chicken", description:"Grilled chicken", price:340, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Meal" },
-            { id:52, name:"Fish Curry", description:"Bengali style fish curry", price:380, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Meal" },
-            { id:53, name:"Mutton Rogan Josh", description:"Kashmiri mutton curry", price:450, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Meal" },
-            { id:54, name:"Palak Paneer", description:"Spinach with cottage cheese", price:240, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Meal" },
-            { id:55, name:"Chole Bhature", description:"Chickpea curry with fried bread", price:160, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Meal" },
-            { id:56, name:"Masala Dosa", description:"Crispy rice crepe", price:120, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Meal" },
-            { id:57, name:"Idli Sambhar", description:"Steamed rice cakes", price:90, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Meal" },
-            { id:58, name:"Pav Bhaji", description:"Spiced vegetable mash", price:110, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Meal" },
-            { id:59, name:"Samosa", description:"Fried pastry with filling", price:30, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Meal" },
-            { id:60, name:"Spring Roll", description:"Crispy vegetable rolls", price:50, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Meal" },
-            { id:61, name:"Chicken Wrap", description:"Grilled chicken in tortilla", price:180, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Meal" },
-            { id:62, name:"Veg Burger", description:"Vegetable patty burger", price:120, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Meal" },
-            { id:63, name:"Pizza Margherita", description:"Classic cheese pizza", price:299, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Meal" },
-            { id:64, name:"Pasta Alfredo", description:"Creamy pasta", price:210, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Meal" },
-            { id:65, name:"Lasagna", description:"Baked pasta layers", price:280, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Meal" },
-            { id:66, name:"Grilled Sandwich", description:"Toasted sandwich with veggies", price:100, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Meal" },
-            { id:67, name:"French Fries", description:"Crispy potato fries", price:80, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Meal" },
-            { id:68, name:"Onion Rings", description:"Crispy fried onions", price:90, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Meal" },
-            { id:69, name:"Garlic Bread", description:"Toasted bread with garlic", price:70, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Meal" },
-            { id:70, name:"Cheese Pizza", description:"Cheesy pizza", price:349, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Meal" },
+            // DRINKS SECTION (20 products) - indices 40 to 59
+            { id:41, name:"Coca Cola", description:"Refreshing soda", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080603/Red_Rose_Bouquet_lxont9.jpg", tag:"Drinks" },
+            { id:42, name:"Pepsi", description:"Cold drink", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080749/Sunflower_Bunch_yl1dnd.jpg", tag:"Drinks" },
+            { id:43, name:"Sprite", description:"Lemon flavored", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080704/Lily_Arrangement_yt37yr.jpg", tag:"Drinks" },
+            { id:44, name:"Fanta", description:"Orange soda", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080856/Tulip_Bunch_cnpd4f.jpg", tag:"Drinks" },
+            { id:45, name:"Mountain Dew", description:"Citrus flavor", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081021/Orchid_Plant_urdtkn.jpg", tag:"Drinks" },
+            { id:46, name:"Thums Up", description:"Strong cola", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081132/Mixed_Flower_Bouquet_t3ywpx.jpg", tag:"Drinks" },
+            { id:47, name:"Mirinda", description:"Fruity soda", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081196/Carnation_Bunch_ei8l39.jpg", tag:"Drinks" },
+            { id:48, name:"7UP", description:"Lemon-lime drink", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081262/Daisy_Bouquet_c5fgeb.png", tag:"Drinks" },
+            { id:49, name:"Red Bull", description:"Energy drink", price:120, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081360/Jasmine_Garland_xyfaj4.jpg", tag:"Drinks" },
+            { id:50, name:"Monster", description:"Energy drink", price:140, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081402/Marigold_Bunch_wqlhka.jpg", tag:"Drinks" },
+            { id:51, name:"Sting", description:"Energy drink", price:50, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081462/Lavender_Bouquet_vmk3ih.jpg", tag:"Drinks" },
+            { id:52, name:"Tropicana", description:"Juice", price:80, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081540/Peony_Bunch_x9bfu6.jpg", tag:"Drinks" },
+            { id:53, name:"Real Juice", description:"Fruit juice", price:90, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081618/Hydrangea_Bouquet_seeej2.jpg", tag:"Drinks" },
+            { id:54, name:"Paper Boat", description:"Traditional drinks", price:60, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081713/Gerbera_Bunch_slwjkx.jpg", tag:"Drinks" },
+            { id:55, name:"Bisleri", description:"Packaged water", price:20, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081779/Chrysanthemum_lnu1le.jpg", tag:"Drinks" },
+            { id:56, name:"Kinley", description:"Packaged water", price:20, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081855/Baby_Breath_jspby9.jpg", tag:"Drinks" },
+            { id:57, name:"Aquafina", description:"Packaged water", price:20, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081911/Gerbera_Bunch_coxfch.jpg", tag:"Drinks" },
+            { id:58, name:"Coke Zero", description:"Zero sugar cola", price:45, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082046/Iris_Bouquet_hzq1uu.jpg", tag:"Drinks" },
+            { id:59, name:"Diet Pepsi", description:"Low calorie", price:45, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082123/Dahlia_Bunch_r10rln.jpg", tag:"Drinks" },
+            { id:60, name:"Slice", description:"Mango drink", price:50, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082202/Zinnia_Bouquet_b0ma7s.jpg", tag:"Drinks" },
             
-            // SKINCARE SECTION (20 products) - indices 70 to 89
-            { id:71, name:"Face Wash", description:"Gentle cleansing", price:150, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083216/Face_Wash_Leeford_bkkfgz.png", tag:"Skincare" },
-            { id:72, name:"Moisturizer", description:"Hydrating cream", price:250, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083219/Moisturizer_r7uu5h.jpg", tag:"Skincare" },
-            { id:73, name:"Sunscreen SPF 50", description:"UV protection", price:350, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083332/Sunscreen_SPF_50_cfjmsr.jpg", tag:"Skincare" },
-            { id:74, name:"Face Serum", description:"Vitamin C serum", price:450, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083401/Face_Serum_gdxyjm.jpg", tag:"Skincare" },
-            { id:75, name:"Face Scrub", description:"Exfoliating scrub", price:200, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083487/Face_Scrub_hdl6eo.jpg", tag:"Skincare" },
-            { id:76, name:"Face Mask", description:"Clay mask", price:280, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083558/Toner_t79nhp.jpg", tag:"Skincare" },
-            { id:77, name:"Toner", description:"Facial toner", price:180, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083611/Eye_Cream_mg16lv.jpg", tag:"Skincare" },
-            { id:78, name:"Eye Cream", description:"Under eye care", price:320, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083611/Eye_Cream_mg16lv.jpg", tag:"Skincare" },
-            { id:79, name:"Lip Balm", description:"Moisturizing lip care", price:80, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Skincare" },
-            { id:80, name:"Body Lotion", description:"Body moisturizer", price:220, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Skincare" },
-            { id:81, name:"Hand Cream", description:"Nourishing hand cream", price:120, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Skincare" },
-            { id:82, name:"Night Cream", description:"Overnight repair", price:380, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Skincare" },
-            { id:83, name:"Under Eye Patches", description:"Revitalizing patches", price:290, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Skincare" },
-            { id:84, name:"Sheet Mask", description:"Hydrating sheet mask", price:99, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Skincare" },
-            { id:85, name:"Face Mist", description:"Refreshing spray", price:160, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Skincare" },
-            { id:86, name:"Cleansing Oil", description:"Oil-based cleanser", price:260, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Skincare" },
-            { id:87, name:"Micellar Water", description:"Gentle makeup remover", price:190, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Skincare" },
-            { id:88, name:"Retinol Cream", description:"Anti-aging cream", price:420, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Skincare" },
-            { id:89, name:"Hyaluronic Acid", description:"Intense hydration", price:390, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Skincare" },
-            { id:90, name:"Niacinamide Serum", description:"Pore minimizing", price:340, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Skincare" },
+            // GIFT ITEMS SECTION (10 products) - NEW! Each with 2 images
+            { id:1001, name:"Birthday Gift Hamper", description:"Complete birthday surprise", price:499, images:["https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=200","https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=200"], tag:"Gift" },
+            { id:1002, name:"Anniversary Special", description:"Romantic gift set", price:699, images:["https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?w=200","https://images.unsplash.com/photo-1519741497674-611481863552?w=200"], tag:"Gift" },
+            { id:1003, name:"Chocolate Bouquet", description:"Assorted chocolates", price:349, images:["https://images.unsplash.com/photo-1511381939415-e44015466834?w=200","https://images.unsplash.com/photo-1549007953-9f8b50b0a8b1?w=200"], tag:"Gift" },
+            { id:1004, name:"Premium Gift Box", description:"Luxury assortment", price:899, images:["https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=200","https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=200"], tag:"Gift" },
+            { id:1005, name:"Teddy Bear Combo", description:"Soft toy with chocolates", price:449, images:["https://images.unsplash.com/photo-1567449303077-14b2f4c4b6e6?w=200","https://images.unsplash.com/photo-1598661444677-3d5f7c64e868?w=200"], tag:"Gift" },
+            { id:1006, name:"Self Care Hamper", description:"Relaxation gift set", price:599, images:["https://images.unsplash.com/photo-1570194065650-d99fb4b8ccb0?w=200","https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200"], tag:"Gift" },
+            { id:1007, name:"New Baby Gift", description:"Baby essentials hamper", price:799, images:["https://images.unsplash.com/photo-1544816155-12df9643f363?w=200","https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=200"], tag:"Gift" },
+            { id:1008, name:"Festival Special", description:"Diwali gift box", price:649, images:["https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=200","https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=200"], tag:"Gift" },
+            { id:1009, name:"Coffee Lover's Pack", description:"Premium coffee set", price:549, images:["https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=200","https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=200"], tag:"Gift" },
+            { id:1010, name:"Spa Gift Set", description:"Relaxation kit", price:699, images:["https://images.unsplash.com/photo-1570194065650-d99fb4b8ccb0?w=200","https://images.unsplash.com/photo-1601721042207-9de1b7d3c9a4?w=200"], tag:"Gift" },
             
-            // ELECTRONICS SECTION (40 products) - indices 90 to 129
-            { id:91, name:"Wireless Earbuds", description:"Bluetooth earphones", price:999, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083700/Wireless_Earbuds_mblylb.jpg", tag:"Electronics" },
-            { id:92, name:"Power Bank 10000mAh", description:"Portable charger", price:799, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083704/Power_Bank_10000mAh_q000qr.jpg", tag:"Electronics" },
-            { id:93, name:"Smart Watch", description:"Fitness tracker", price:2499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083795/Smart_Watch_e606ce.jpg", tag:"Electronics" },
-            { id:94, name:"Bluetooth Speaker", description:"Portable speaker", price:1499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083838/Bluetooth_Speaker_r97bvx.jpg", tag:"Electronics" },
-            { id:95, name:"USB-C Cable", description:"Fast charging cable", price:199, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083830/USB-C_Cable_iprh40.jpg", tag:"Electronics" },
-            { id:96, name:"Phone Case", description:"Protective cover", price:399, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Electronics" },
-            { id:97, name:"Screen Protector", description:"Tempered glass", price:149, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Electronics" },
-            { id:98, name:"Wireless Charger", description:"Qi charging pad", price:899, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Electronics" },
-            { id:99, name:"Selfie Stick", description:"Extendable phone holder", price:299, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Electronics" },
-            { id:100, name:"Tripod", description:"Camera/phone stand", price:499, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Electronics" },
-            { id:101, name:"Smart Bulb", description:"WiFi enabled LED", price:599, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Electronics" },
-            { id:102, name:"HDMI Cable", description:"High speed cable", price:249, image:"https://static.wixstatic.com/media/11062b_3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b~mv2.jpg", tag:"Electronics" },
-            { id:103, name:"USB Hub", description:"Multi-port adapter", price:399, image:"https://static.wixstatic.com/media/11062b_4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c~mv2.jpg", tag:"Electronics" },
-            { id:104, name:"Webcam", description:"HD camera", price:1299, image:"https://static.wixstatic.com/media/11062b_5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d~mv2.jpg", tag:"Electronics" },
-            { id:105, name:"Gaming Mouse", description:"RGB gaming mouse", price:699, image:"https://static.wixstatic.com/media/11062b_6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e~mv2.jpg", tag:"Electronics" },
-            { id:106, name:"Mechanical Keyboard", description:"RGB keyboard", price:1899, image:"https://static.wixstatic.com/media/11062b_7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f~mv2.jpg", tag:"Electronics" },
-            { id:107, name:"Laptop Stand", description:"Ergonomic stand", price:799, image:"https://static.wixstatic.com/media/11062b_8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a~mv2.jpg", tag:"Electronics" },
-            { id:108, name:"Cooling Pad", description:"Laptop cooler", price:899, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Electronics" },
-            { id:109, name:"Smart Plug", description:"WiFi smart outlet", price:499, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Electronics" },
-            { id:110, name:"Fitness Band", description:"Activity tracker", price:1499, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Electronics" },
-            { id:111, name:"Action Camera", description:"Waterproof camera", price:3499, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Electronics" },
-            { id:112, name:"Drone", description:"Mini drone", price:4999, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Electronics" },
-            { id:113, name:"VR Headset", description:"Virtual reality", price:1999, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Electronics" },
-            { id:114, name:"Smart Speaker", description:"Voice assistant", price:2499, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Electronics" },
-            { id:115, name:"Security Camera", description:"Home security", price:1799, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Electronics" },
-            { id:116, name:"Video Doorbell", description:"Smart doorbell", price:2999, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Electronics" },
-            { id:117, name:"Robot Vacuum", description:"Automatic cleaner", price:8999, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Electronics" },
-            { id:118, name:"Air Purifier", description:"Air cleaner", price:4999, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Electronics" },
-            { id:119, name:"Hair Dryer", description:"Professional dryer", price:1299, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Electronics" },
-            { id:120, name:"Trimmer", description:"Mens grooming", price:799, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Electronics" },
-            { id:121, name:"Electric Toothbrush", description:"Rechargeable", price:1499, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Electronics" },
-            { id:122, name:"Smart Scale", description:"Body analyzer", price:999, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Electronics" },
-            { id:123, name:"Projector", description:"Mini projector", price:3999, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Electronics" },
-            { id:124, name:"Portable SSD", description:"500GB storage", price:4499, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Electronics" },
-            { id:125, name:"Memory Card", description:"128GB microSD", price:899, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Electronics" },
-            { id:126, name:"USB Flash Drive", description:"64GB storage", price:399, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Electronics" },
-            { id:127, name:"Router", description:"WiFi 6 router", price:2499, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Electronics" },
-            { id:128, name:"Extender", description:"WiFi range extender", price:1299, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Electronics" },
-            { id:129, name:"HDMI Adapter", description:"USB-C to HDMI", price:499, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Electronics" },
-            { id:130, name:"Car Charger", description:"Fast car charger", price:299, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Electronics" }
+            // FROZEN SECTION (20 products) - indices 60 to 79
+            { id:61, name:"Ice Cream Vanilla", description:"Creamy vanilla", price:80, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082667/Chicken_Biryani_wu4h7l.jpg", tag:"Frozen" },
+            { id:62, name:"Ice Cream Chocolate", description:"Rich chocolate", price:80, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082377/veg-thali_mfdwys.jpg", tag:"Frozen" },
+            { id:63, name:"Ice Cream Strawberry", description:"Strawberry flavor", price:80, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082369/Butter_Chicken_amovgn.jpg", tag:"Frozen" },
+            { id:64, name:"Frozen Veggies", description:"Mixed vegetables", price:120, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082768/Paneer_Butter_Masala_ggf6wd.jpg", tag:"Frozen" },
+            { id:65, name:"Frozen Peas", description:"Green peas", price:60, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082858/Dal_Makhani_wyilpn.jpg", tag:"Frozen" },
+            { id:66, name:"Frozen Corn", description:"Sweet corn", price:70, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082965/Naan_Bread_ypzvvm.jpg", tag:"Frozen" },
+            { id:67, name:"Frozen Paratha", description:"Stuffed paratha", price:90, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083033/Chicken_Fried_Rice_guofi9.jpg", tag:"Frozen" },
+            { id:68, name:"Frozen Pizza", description:"Margherita pizza", price:180, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Frozen" },
+            { id:69, name:"Frozen Spring Roll", description:"Veg spring rolls", price:100, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Frozen" },
+            { id:70, name:"Frozen Samosa", description:"Aloo samosa", price:90, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Frozen" },
+            { id:71, name:"Ice Cream Sandwich", description:"Cookie sandwich", price:60, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Frozen" },
+            { id:72, name:"Ice Cream Cone", description:"Crispy cone", price:50, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Frozen" },
+            { id:73, name:"Frozen Momos", description:"Veg momos", price:120, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Frozen" },
+            { id:74, name:"Frozen French Fries", description:"Crispy fries", price:80, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Frozen" },
+            { id:75, name:"Frozen Chicken Nuggets", description:"Chicken nuggets", price:160, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Frozen" },
+            { id:76, name:"Frozen Fish Fingers", description:"Fish fingers", price:180, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Frozen" },
+            { id:77, name:"Ice Cream Tub", description:"Family pack", price:250, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Frozen" },
+            { id:78, name:"Frozen Fruits", description:"Mixed fruits", price:110, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Frozen" },
+            { id:79, name:"Frozen Smoothie Pack", description:"Smoothie mix", price:130, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Frozen" },
+            { id:80, name:"Kulfi", description:"Traditional ice cream", price:70, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Frozen" },
+            
+            // LUNCH & DINNER SECTION (30 products) - indices 80 to 109
+            { id:81, name:"Chicken Biryani", description:"Aromatic rice with chicken", price:250, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082667/Chicken_Biryani_wu4h7l.jpg", tag:"Meal" },
+            { id:82, name:"Veg Thali", description:"Complete vegetarian meal", price:180, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082377/veg-thali_mfdwys.jpg", tag:"Meal" },
+            { id:83, name:"Butter Chicken", description:"Creamy tomato curry", price:320, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082369/Butter_Chicken_amovgn.jpg", tag:"Meal" },
+            { id:84, name:"Paneer Butter Masala", description:"Cottage cheese in rich gravy", price:280, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082768/Paneer_Butter_Masala_ggf6wd.jpg", tag:"Meal" },
+            { id:85, name:"Dal Makhani", description:"Creamy black lentils", price:220, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082858/Dal_Makhani_wyilpn.jpg", tag:"Meal" },
+            { id:86, name:"Naan Bread", description:"Freshly baked bread", price:40, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082965/Naan_Bread_ypzvvm.jpg", tag:"Meal" },
+            { id:87, name:"Chicken Fried Rice", description:"Chinese style fried rice", price:210, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083033/Chicken_Fried_Rice_guofi9.jpg", tag:"Meal" },
+            { id:88, name:"Veg Noodles", description:"Indo-Chinese noodles", price:150, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Meal" },
+            { id:89, name:"Chili Chicken", description:"Spicy chicken appetizer", price:260, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Meal" },
+            { id:90, name:"Veg Manchurian", description:"Vegetable balls in sauce", price:190, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Meal" },
+            { id:91, name:"Tandoori Chicken", description:"Grilled chicken", price:340, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Meal" },
+            { id:92, name:"Fish Curry", description:"Bengali style fish curry", price:380, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Meal" },
+            { id:93, name:"Mutton Rogan Josh", description:"Kashmiri mutton curry", price:450, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Meal" },
+            { id:94, name:"Palak Paneer", description:"Spinach with cottage cheese", price:240, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Meal" },
+            { id:95, name:"Chole Bhature", description:"Chickpea curry with fried bread", price:160, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Meal" },
+            { id:96, name:"Masala Dosa", description:"Crispy rice crepe", price:120, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Meal" },
+            { id:97, name:"Idli Sambhar", description:"Steamed rice cakes", price:90, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Meal" },
+            { id:98, name:"Pav Bhaji", description:"Spiced vegetable mash", price:110, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Meal" },
+            { id:99, name:"Samosa", description:"Fried pastry with filling", price:30, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Meal" },
+            { id:100, name:"Spring Roll", description:"Crispy vegetable rolls", price:50, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Meal" },
+            { id:101, name:"Chicken Wrap", description:"Grilled chicken in tortilla", price:180, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Meal" },
+            { id:102, name:"Veg Burger", description:"Vegetable patty burger", price:120, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Meal" },
+            { id:103, name:"Pizza Margherita", description:"Classic cheese pizza", price:299, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Meal" },
+            { id:104, name:"Pasta Alfredo", description:"Creamy pasta", price:210, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Meal" },
+            { id:105, name:"Lasagna", description:"Baked pasta layers", price:280, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Meal" },
+            { id:106, name:"Grilled Sandwich", description:"Toasted sandwich with veggies", price:100, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Meal" },
+            { id:107, name:"French Fries", description:"Crispy potato fries", price:80, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Meal" },
+            { id:108, name:"Onion Rings", description:"Crispy fried onions", price:90, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Meal" },
+            { id:109, name:"Garlic Bread", description:"Toasted bread with garlic", price:70, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Meal" },
+            { id:110, name:"Cheese Pizza", description:"Cheesy pizza", price:349, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Meal" },
+            
+            // FLOWERS SECTION (20 products) - indices 110 to 129
+            { id:111, name:"Red Rose Bouquet", description:"Fresh red roses", price:299, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080603/Red_Rose_Bouquet_lxont9.jpg", tag:"Flowers" },
+            { id:112, name:"Sunflower Bunch", description:"Bright sunflowers", price:249, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080749/Sunflower_Bunch_yl1dnd.jpg", tag:"Flowers" },
+            { id:113, name:"Lily Arrangement", description:"Elegant white lilies", price:399, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080704/Lily_Arrangement_yt37yr.jpg", tag:"Flowers" },
+            { id:114, name:"Tulip Bunch", description:"Colorful tulips", price:349, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776080856/Tulip_Bunch_cnpd4f.jpg", tag:"Flowers" },
+            { id:115, name:"Orchid Plant", description:"Exotic orchid", price:449, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081021/Orchid_Plant_urdtkn.jpg", tag:"Flowers" },
+            { id:116, name:"Mixed Flower Bouquet", description:"Assorted fresh flowers", price:379, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081132/Mixed_Flower_Bouquet_t3ywpx.jpg", tag:"Flowers" },
+            { id:117, name:"Carnation Bunch", description:"Pretty carnations", price:199, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081196/Carnation_Bunch_ei8l39.jpg", tag:"Flowers" },
+            { id:118, name:"Daisy Bouquet", description:"Cheerful daisies", price:229, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081262/Daisy_Bouquet_c5fgeb.png", tag:"Flowers" },
+            { id:119, name:"Jasmine Garland", description:"Fragrant jasmine", price:179, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081360/Jasmine_Garland_xyfaj4.jpg", tag:"Flowers" },
+            { id:120, name:"Marigold Bunch", description:"Vibrant marigolds", price:149, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081402/Marigold_Bunch_wqlhka.jpg", tag:"Flowers" },
+            { id:121, name:"Lavender Bouquet", description:"Calming lavender", price:279, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081462/Lavender_Bouquet_vmk3ih.jpg", tag:"Flowers" },
+            { id:122, name:"Peony Bunch", description:"Romantic peonies", price:429, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081540/Peony_Bunch_x9bfu6.jpg", tag:"Flowers" },
+            { id:123, name:"Hydrangea Bouquet", description:"Full hydrangeas", price:389, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081618/Hydrangea_Bouquet_seeej2.jpg", tag:"Flowers" },
+            { id:124, name:"Gerbera Bunch", description:"Colorful gerberas", price:259, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081713/Gerbera_Bunch_slwjkx.jpg", tag:"Flowers" },
+            { id:125, name:"Chrysanthemum", description:"Floral chrysanthemums", price:189, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081779/Chrysanthemum_lnu1le.jpg", tag:"Flowers" },
+            { id:126, name:"Baby Breath", description:"Delicate filler flowers", price:129, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081855/Baby_Breath_jspby9.jpg", tag:"Flowers" },
+            { id:127, name:"Gladiolus", description:"Tall elegant flowers", price:219, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776081911/Gerbera_Bunch_coxfch.jpg", tag:"Flowers" },
+            { id:128, name:"Iris Bouquet", description:"Beautiful irises", price:289, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082046/Iris_Bouquet_hzq1uu.jpg", tag:"Flowers" },
+            { id:129, name:"Dahlia Bunch", description:"Stunning dahlias", price:319, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082123/Dahlia_Bunch_r10rln.jpg", tag:"Flowers" },
+            { id:130, name:"Zinnia Bouquet", description:"Vibrant zinnias", price:239, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776082202/Zinnia_Bouquet_b0ma7s.jpg", tag:"Flowers" },
+            
+            // SKINCARE SECTION (20 products) - indices 130 to 149
+            { id:131, name:"Face Wash", description:"Gentle cleansing", price:150, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083216/Face_Wash_Leeford_bkkfgz.png", tag:"Skincare" },
+            { id:132, name:"Moisturizer", description:"Hydrating cream", price:250, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083219/Moisturizer_r7uu5h.jpg", tag:"Skincare" },
+            { id:133, name:"Sunscreen SPF 50", description:"UV protection", price:350, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083332/Sunscreen_SPF_50_cfjmsr.jpg", tag:"Skincare" },
+            { id:134, name:"Face Serum", description:"Vitamin C serum", price:450, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083401/Face_Serum_gdxyjm.jpg", tag:"Skincare" },
+            { id:135, name:"Face Scrub", description:"Exfoliating scrub", price:200, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083487/Face_Scrub_hdl6eo.jpg", tag:"Skincare" },
+            { id:136, name:"Face Mask", description:"Clay mask", price:280, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083558/Toner_t79nhp.jpg", tag:"Skincare" },
+            { id:137, name:"Toner", description:"Facial toner", price:180, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083611/Eye_Cream_mg16lv.jpg", tag:"Skincare" },
+            { id:138, name:"Eye Cream", description:"Under eye care", price:320, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083611/Eye_Cream_mg16lv.jpg", tag:"Skincare" },
+            { id:139, name:"Lip Balm", description:"Moisturizing lip care", price:80, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Skincare" },
+            { id:140, name:"Body Lotion", description:"Body moisturizer", price:220, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Skincare" },
+            { id:141, name:"Hand Cream", description:"Nourishing hand cream", price:120, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Skincare" },
+            { id:142, name:"Night Cream", description:"Overnight repair", price:380, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Skincare" },
+            { id:143, name:"Under Eye Patches", description:"Revitalizing patches", price:290, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Skincare" },
+            { id:144, name:"Sheet Mask", description:"Hydrating sheet mask", price:99, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Skincare" },
+            { id:145, name:"Face Mist", description:"Refreshing spray", price:160, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Skincare" },
+            { id:146, name:"Cleansing Oil", description:"Oil-based cleanser", price:260, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Skincare" },
+            { id:147, name:"Micellar Water", description:"Gentle makeup remover", price:190, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Skincare" },
+            { id:148, name:"Retinol Cream", description:"Anti-aging cream", price:420, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Skincare" },
+            { id:149, name:"Hyaluronic Acid", description:"Intense hydration", price:390, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Skincare" },
+            { id:150, name:"Niacinamide Serum", description:"Pore minimizing", price:340, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Skincare" },
+            
+            // MIZO PRODUCT SECTION (20 products) - indices 150 to 169
+            { id:151, name:"Mizo Handloom", description:"Traditional handloom", price:499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083700/Wireless_Earbuds_mblylb.jpg", tag:"Mizo Product" },
+            { id:152, name:"Mizo Shawl", description:"Warm traditional shawl", price:799, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083704/Power_Bank_10000mAh_q000qr.jpg", tag:"Mizo Product" },
+            { id:153, name:"Mizo Bamboo Craft", description:"Handmade bamboo items", price:299, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083795/Smart_Watch_e606ce.jpg", tag:"Mizo Product" },
+            { id:154, name:"Mizo Pickle", description:"Traditional pickle", price:120, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083838/Bluetooth_Speaker_r97bvx.jpg", tag:"Mizo Product" },
+            { id:155, name:"Mizo Chhang", description:"Traditional rice beer", price:150, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083830/USB-C_Cable_iprh40.jpg", tag:"Mizo Product" },
+            { id:156, name:"Mizo Bamboo Shoot", description:"Fermented bamboo shoot", price:80, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Mizo Product" },
+            { id:157, name:"Mizo Smoked Meat", description:"Traditional smoked meat", price:350, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Mizo Product" },
+            { id:158, name:"Mizo Traditional Dress", description:"Traditional attire", price:1299, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Mizo Product" },
+            { id:159, name:"Mizo Ornaments", description:"Traditional jewelry", price:599, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Mizo Product" },
+            { id:160, name:"Mizo Bamboo Basket", description:"Handwoven basket", price:249, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Mizo Product" },
+            { id:161, name:"Mizo Chilli", description:"Bird's eye chilli", price:60, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Mizo Product" },
+            { id:162, name:"Mizo Turmeric", description:"Organic turmeric", price:90, image:"https://static.wixstatic.com/media/11062b_3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b~mv2.jpg", tag:"Mizo Product" },
+            { id:163, name:"Mizo Ginger", description:"Fresh ginger", price:70, image:"https://static.wixstatic.com/media/11062b_4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c~mv2.jpg", tag:"Mizo Product" },
+            { id:164, name:"Mizo Honey", description:"Pure forest honey", price:250, image:"https://static.wixstatic.com/media/11062b_5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d~mv2.jpg", tag:"Mizo Product" },
+            { id:165, name:"Mizo Tea", description:"Traditional tea", price:180, image:"https://static.wixstatic.com/media/11062b_6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e~mv2.jpg", tag:"Mizo Product" },
+            { id:166, name:"Mizo Coffee", description:"Local coffee", price:220, image:"https://static.wixstatic.com/media/11062b_7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f~mv2.jpg", tag:"Mizo Product" },
+            { id:167, name:"Mizo Herbal Oil", description:"Traditional oil", price:150, image:"https://static.wixstatic.com/media/11062b_8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a~mv2.jpg", tag:"Mizo Product" },
+            { id:168, name:"Mizo Incense", description:"Traditional incense", price:100, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Mizo Product" },
+            { id:169, name:"Mizo Musical Instrument", description:"Traditional instrument", price:899, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Mizo Product" },
+            { id:170, name:"Mizo Wall Hanging", description:"Decorative wall piece", price:349, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Mizo Product" },
+            
+            // ELECTRONICS SECTION (40 products) - indices 170 to 209
+            { id:171, name:"Wireless Earbuds", description:"Bluetooth earphones", price:999, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083700/Wireless_Earbuds_mblylb.jpg", tag:"Electronics" },
+            { id:172, name:"Power Bank 10000mAh", description:"Portable charger", price:799, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083704/Power_Bank_10000mAh_q000qr.jpg", tag:"Electronics" },
+            { id:173, name:"Smart Watch", description:"Fitness tracker", price:2499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083795/Smart_Watch_e606ce.jpg", tag:"Electronics" },
+            { id:174, name:"Bluetooth Speaker", description:"Portable speaker", price:1499, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083838/Bluetooth_Speaker_r97bvx.jpg", tag:"Electronics" },
+            { id:175, name:"USB-C Cable", description:"Fast charging cable", price:199, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083830/USB-C_Cable_iprh40.jpg", tag:"Electronics" },
+            { id:176, name:"Phone Case", description:"Protective cover", price:399, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Electronics" },
+            { id:177, name:"Screen Protector", description:"Tempered glass", price:149, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Electronics" },
+            { id:178, name:"Wireless Charger", description:"Qi charging pad", price:899, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Electronics" },
+            { id:179, name:"Selfie Stick", description:"Extendable phone holder", price:299, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Electronics" },
+            { id:180, name:"Tripod", description:"Camera/phone stand", price:499, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Electronics" },
+            { id:181, name:"Smart Bulb", description:"WiFi enabled LED", price:599, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Electronics" },
+            { id:182, name:"HDMI Cable", description:"High speed cable", price:249, image:"https://static.wixstatic.com/media/11062b_3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b~mv2.jpg", tag:"Electronics" },
+            { id:183, name:"USB Hub", description:"Multi-port adapter", price:399, image:"https://static.wixstatic.com/media/11062b_4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c~mv2.jpg", tag:"Electronics" },
+            { id:184, name:"Webcam", description:"HD camera", price:1299, image:"https://static.wixstatic.com/media/11062b_5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d~mv2.jpg", tag:"Electronics" },
+            { id:185, name:"Gaming Mouse", description:"RGB gaming mouse", price:699, image:"https://static.wixstatic.com/media/11062b_6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e~mv2.jpg", tag:"Electronics" },
+            { id:186, name:"Mechanical Keyboard", description:"RGB keyboard", price:1899, image:"https://static.wixstatic.com/media/11062b_7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f~mv2.jpg", tag:"Electronics" },
+            { id:187, name:"Laptop Stand", description:"Ergonomic stand", price:799, image:"https://static.wixstatic.com/media/11062b_8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a~mv2.jpg", tag:"Electronics" },
+            { id:188, name:"Cooling Pad", description:"Laptop cooler", price:899, image:"https://static.wixstatic.com/media/11062b_9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b~mv2.jpg", tag:"Electronics" },
+            { id:189, name:"Smart Plug", description:"WiFi smart outlet", price:499, image:"https://static.wixstatic.com/media/11062b_0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c~mv2.jpg", tag:"Electronics" },
+            { id:190, name:"Fitness Band", description:"Activity tracker", price:1499, image:"https://static.wixstatic.com/media/11062b_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d~mv2.jpg", tag:"Electronics" },
+            { id:191, name:"Action Camera", description:"Waterproof camera", price:3499, image:"https://static.wixstatic.com/media/11062b_2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e~mv2.jpg", tag:"Electronics" },
+            { id:192, name:"Drone", description:"Mini drone", price:4999, image:"https://static.wixstatic.com/media/11062b_3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f~mv2.jpg", tag:"Electronics" },
+            { id:193, name:"VR Headset", description:"Virtual reality", price:1999, image:"https://static.wixstatic.com/media/11062b_4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a~mv2.jpg", tag:"Electronics" },
+            { id:194, name:"Smart Speaker", description:"Voice assistant", price:2499, image:"https://static.wixstatic.com/media/11062b_5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b~mv2.jpg", tag:"Electronics" },
+            { id:195, name:"Security Camera", description:"Home security", price:1799, image:"https://static.wixstatic.com/media/11062b_6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c~mv2.jpg", tag:"Electronics" },
+            { id:196, name:"Video Doorbell", description:"Smart doorbell", price:2999, image:"https://static.wixstatic.com/media/11062b_7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d~mv2.jpg", tag:"Electronics" },
+            { id:197, name:"Robot Vacuum", description:"Automatic cleaner", price:8999, image:"https://static.wixstatic.com/media/11062b_8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e~mv2.jpg", tag:"Electronics" },
+            { id:198, name:"Air Purifier", description:"Air cleaner", price:4999, image:"https://static.wixstatic.com/media/11062b_9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f~mv2.jpg", tag:"Electronics" },
+            { id:199, name:"Hair Dryer", description:"Professional dryer", price:1299, image:"https://static.wixstatic.com/media/11062b_0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a~mv2.jpg", tag:"Electronics" },
+            { id:200, name:"Trimmer", description:"Mens grooming", price:799, image:"https://static.wixstatic.com/media/11062b_1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b~mv2.jpg", tag:"Electronics" },
+            { id:201, name:"Electric Toothbrush", description:"Rechargeable", price:1499, image:"https://static.wixstatic.com/media/11062b_2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c~mv2.jpg", tag:"Electronics" },
+            { id:202, name:"Smart Scale", description:"Body analyzer", price:999, image:"https://static.wixstatic.com/media/11062b_3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d~mv2.jpg", tag:"Electronics" },
+            { id:203, name:"Projector", description:"Mini projector", price:3999, image:"https://static.wixstatic.com/media/11062b_4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e~mv2.jpg", tag:"Electronics" },
+            { id:204, name:"Portable SSD", description:"500GB storage", price:4499, image:"https://static.wixstatic.com/media/11062b_5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f~mv2.jpg", tag:"Electronics" },
+            { id:205, name:"Memory Card", description:"128GB microSD", price:899, image:"https://static.wixstatic.com/media/11062b_6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a~mv2.jpg", tag:"Electronics" },
+            { id:206, name:"USB Flash Drive", description:"64GB storage", price:399, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Electronics" },
+            { id:207, name:"Router", description:"WiFi 6 router", price:2499, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Electronics" },
+            { id:208, name:"Extender", description:"WiFi range extender", price:1299, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Electronics" },
+            { id:209, name:"HDMI Adapter", description:"USB-C to HDMI", price:499, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Electronics" },
+            { id:210, name:"Car Charger", description:"Fast car charger", price:299, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Electronics" },
+
+            // TOBACCO SECTION (20 products) - indices 210 to 229 (LAST SLIDE)
+            { id:211, name:"Silkcut", description:"Classic full flavor", price:70, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776249180/cut_kuob5l.jpg", tag:"Tobacco" },
+            { id:212, name:"WillsFlake", description:"Smooth premium", price:80, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776249185/Flake_y3jt32.jpg", tag:"Tobacco" },
+            { id:213, name:"GoldFlake", description:"Mild cigarette", price:100, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776249319/Gold_vaoals.jpg", tag:"Tobacco" },
+            { id:214, name:"Classic GoldFlake", description:"Mild cigarette", price:300, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776249526/wills-classic-mild-10-sticks-600x600_q9pqtj.webp", tag:"Tobacco" },
+            { id:215, name:"IndiMint", description:"Mild cigarette", price:115, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776249636/IndieMint_ybjjt8.jpg", tag:"Tobacco" },
+            { id:216, name:"Navycut", description:"Mild cigarette", price:100, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776249517/Navy_qyewpa.jpg", tag:"Tobacco" },
+            { id:217, name:"Mixpod", description:"Mild cigarette", price:100, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776250875/Mixpod_wnmfek.jpg", tag:"Tobacco" },
+            { id:218, name:"FarStar", description:"Mild cigarette", price:80, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776251200/FarStar_qy533v.jpg", tag:"Tobacco" },
+            { id:219, name:"V Cigarette", description:"Mild cigarette", price:70, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776251224/V_Cigarettes_dfkye7.jpg", tag:"Tobacco" },
+            { id:220, name:"Marlboro Red", description:"Classic full flavor", price:350, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083700/Wireless_Earbuds_mblylb.jpg", tag:"Tobacco" },
+            { id:221, name:"Gold Flake Kings", description:"Smooth premium", price:320, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083704/Power_Bank_10000mAh_q000qr.jpg", tag:"Tobacco" },
+            { id:222, name:"Classic Mild", description:"Mild cigarette", price:300, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083795/Smart_Watch_e606ce.jpg", tag:"Tobacco" },
+            { id:223, name:"Marlboro Advance", description:"Smooth taste", price:380, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083838/Bluetooth_Speaker_r97bvx.jpg", tag:"Tobacco" },
+            { id:224, name:"Gold Flake Lights", description:"Light cigarettes", price:310, image:"https://res.cloudinary.com/dvb54d0nu/image/upload/v1776083830/USB-C_Cable_iprh40.jpg", tag:"Tobacco" },
+            { id:225, name:"Classic Regular", description:"Regular strength", price:290, image:"https://static.wixstatic.com/media/11062b_7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b~mv2.jpg", tag:"Tobacco" },
+            { id:226, name:"Marlboro Fine Touch", description:"Premium quality", price:400, image:"https://static.wixstatic.com/media/11062b_8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c~mv2.jpg", tag:"Tobacco" },
+            { id:227, name:"Gold Flake Premium", description:"Premium blend", price:350, image:"https://static.wixstatic.com/media/11062b_9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d~mv2.jpg", tag:"Tobacco" },
+            { id:228, name:"Classic Ultra Mild", description:"Ultra mild", price:310, image:"https://static.wixstatic.com/media/11062b_0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e~mv2.jpg", tag:"Tobacco" },
+            { id:229, name:"Marlboro Clove", description:"Clove infused", price:420, image:"https://static.wixstatic.com/media/11062b_1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f~mv2.jpg", tag:"Tobacco" },
+            { id:230, name:"Gold Flake Mint", description:"Mint flavor", price:330, image:"https://static.wixstatic.com/media/11062b_2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a~mv2.jpg", tag:"Tobacco" }
         ];
 
         let cart = [];
@@ -1606,139 +1922,130 @@
         let ordersUnsubscribe = null;
         let currentDisplayMode = 'full';
         let allOrdersData = [];
+        
+        // Gift item image state tracking
+        let giftImageIndices = {};
 
         const savedUser = localStorage.getItem('quickmart_user');
         if (savedUser) {
             loggedInUser = JSON.parse(savedUser);
             console.log('✅ Loaded user:', loggedInUser);
         }
-     // ===============================================
-// 📧 BREVO EMAIL SERVICE - 300 FREE EMAILS/DAY
-// ===============================================
-const BREVO_API_KEY = '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'; // <-- PASTE YOUR API KEY HERE
 
-// Function to send order confirmation emails via Brevo
-async function sendOrderConfirmationEmails(orderData, orderId) {
-    console.log('📧 Sending order confirmation via Brevo for:', orderData.userInfo.email);
-    
-    try {
-        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-            method: 'POST',
-            headers: {
-                'accept': 'application/json',
-                'api-key': BREVO_API_KEY,
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                sender: {
-                    name: 'MizoMinute',
-                    email: 'mizominute@gmail.com'  // Your verified sender email
-                },
-                to: [{
-                    email: orderData.userInfo.email,
-                    name: orderData.userInfo.name
-                }],
-                subject: `Order Confirmation #${orderId} - MizoMinute`,
-                htmlContent: `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    </head>
-                    <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
-                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                            <div style="background-color: #ff6f2f; padding: 30px; text-align: center;">
-                                <h1 style="color: #ffffff; margin: 0;">MizoMinute</h1>
-                                <p style="color: #ffffff; margin: 10px 0 0;">Order Confirmed! 🎉</p>
-                            </div>
-                            <div style="padding: 30px;">
-                                <h2 style="color: #333;">Hello ${orderData.userInfo.name},</h2>
-                                <p>Thank you for shopping with MizoMinute! Your order has been confirmed and will be processed soon.</p>
-                                
-                                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                                    <p style="margin: 5px 0;"><strong>Order ID:</strong> #${orderId}</p>
-                                    <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+        // ===============================================
+        // 📧 BREVO EMAIL SERVICE
+        // ===============================================
+        const BREVO_API_KEY = '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';
+
+        async function sendOrderConfirmationEmails(orderData, orderId) {
+            console.log('📧 Sending order confirmation via Brevo for:', orderData.userInfo.email);
+            
+            try {
+                const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'api-key': BREVO_API_KEY,
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sender: {
+                            name: 'MizoMinute',
+                            email: 'mizominute@gmail.com'
+                        },
+                        to: [{
+                            email: orderData.userInfo.email,
+                            name: orderData.userInfo.name
+                        }],
+                        subject: `Order Confirmation #${orderId} - MizoMinute`,
+                        htmlContent: `
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            </head>
+                            <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+                                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                                    <div style="background-color: #87CEEB; padding: 30px; text-align: center;">
+                                        <h1 style="color: #ffffff; margin: 0;">MizoMinute</h1>
+                                        <p style="color: #ffffff; margin: 10px 0 0;">Order Confirmed! 🎉</p>
+                                    </div>
+                                    <div style="padding: 30px;">
+                                        <h2 style="color: #333;">Hello ${orderData.userInfo.name},</h2>
+                                        <p>Thank you for shopping with MizoMinute! Your order has been confirmed and will be processed soon.</p>
+                                        
+                                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                                            <p style="margin: 5px 0;"><strong>Order ID:</strong> #${orderId}</p>
+                                            <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+                                        </div>
+                                        
+                                        <h3 style="color: #87CEEB;">Order Summary</h3>
+                                        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                                            <thead>
+                                                <tr style="background-color: #f5f5f5; border-bottom: 2px solid #87CEEB;">
+                                                    <th style="padding: 12px; text-align: left;">Item</th>
+                                                    <th style="padding: 12px; text-align: center;">Qty</th>
+                                                    <th style="padding: 12px; text-align: right;">Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${orderData.items.map(item => `
+                                                    <tr style="border-bottom: 1px solid #eee;">
+                                                        <td style="padding: 10px;">${item.name}</td>
+                                                        <td style="padding: 10px; text-align: center;">${item.quantity}</td>
+                                                        <td style="padding: 10px; text-align: right;">₹${item.subtotal}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr style="background-color: #fff0e8; border-top: 2px solid #87CEEB;">
+                                                    <td colspan="2" style="padding: 12px; text-align: right;"><strong>Grand Total:</strong></td>
+                                                    <td style="padding: 12px; text-align: right;"><strong style="color: #87CEEB;">₹${orderData.grandTotal}</strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                        
+                                        <h3 style="color: #87CEEB;">Delivery Address</h3>
+                                        <p style="background-color: #f8f9fa; padding: 12px; border-radius: 8px;">
+                                            ${orderData.deliveryInfo.houseNo},<br>
+                                            ${orderData.deliveryInfo.address},<br>
+                                            ${orderData.deliveryInfo.landmark},<br>
+                                            ${orderData.deliveryInfo.city}
+                                        </p>
+                                        
+                                        <h3 style="color: #87CEEB;">Payment Method</h3>
+                                        <p>${orderData.paymentMethod === 'COD' ? '💰 Cash on Delivery' : '💳 Pay on Delivery'}</p>
+                                        
+                                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+                                        
+                                        <p style="color: #666; font-size: 12px; text-align: center;">
+                                            📧 For any questions, contact us at: mizominute@gmail.com<br>
+                                            🚚 Track your order status by logging into your account.
+                                        </p>
+                                    </div>
                                 </div>
-                                
-                                <h3 style="color: #ff6f2f;">Order Summary</h3>
-                                <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
-                                    <thead>
-                                        <tr style="background-color: #f5f5f5; border-bottom: 2px solid #ff6f2f;">
-                                            <th style="padding: 12px; text-align: left;">Item</th>
-                                            <th style="padding: 12px; text-align: center;">Qty</th>
-                                            <th style="padding: 12px; text-align: right;">Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${orderData.items.map(item => `
-                                            <tr style="border-bottom: 1px solid #eee;">
-                                                <td style="padding: 10px;">${item.name}</td>
-                                                <td style="padding: 10px; text-align: center;">${item.quantity}</td>
-                                                <td style="padding: 10px; text-align: right;">₹${item.subtotal}</td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                    <tfoot>
-                                        <tr style="background-color: #fff0e8; border-top: 2px solid #ff6f2f;">
-                                            <td colspan="2" style="padding: 12px; text-align: right;"><strong>Grand Total:</strong></td>
-                                            <td style="padding: 12px; text-align: right;"><strong style="color: #ff6f2f;">₹${orderData.grandTotal}</strong></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                                
-                                <h3 style="color: #ff6f2f;">Delivery Address</h3>
-                                <p style="background-color: #f8f9fa; padding: 12px; border-radius: 8px;">
-                                    ${orderData.deliveryInfo.houseNo},<br>
-                                    ${orderData.deliveryInfo.address},<br>
-                                    ${orderData.deliveryInfo.landmark},<br>
-                                    ${orderData.deliveryInfo.city}
-                                </p>
-                                
-                                <h3 style="color: #ff6f2f;">Payment Method</h3>
-                                <p>${orderData.paymentMethod === 'COD' ? '💰 Cash on Delivery' : '💳 Pay on Delivery'}</p>
-                                
-                                <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
-                                
-                                <p style="color: #666; font-size: 12px; text-align: center;">
-                                    📧 For any questions, contact us at: mizominute@gmail.com<br>
-                                    🚚 Track your order status by logging into your account.
-                                </p>
-                            </div>
-                        </div>
-                    </body>
-                    </html>
-                `
-            })
-        });
-        
-        if (response.ok) {
-            console.log('✅ Order confirmation email sent successfully!');
-            showEmailToast();
-            return true;
-        } else {
-            const error = await response.json();
-            console.error('❌ Brevo error:', error);
-            return false;
+                            </body>
+                            </html>
+                        `
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('✅ Order confirmation email sent successfully!');
+                    showEmailToast();
+                    return true;
+                } else {
+                    const error = await response.json();
+                    console.error('❌ Brevo error:', error);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Email error:', error);
+                return false;
+            }
         }
-    } catch (error) {
-        console.error('❌ Email error:', error);
-        return false;
-    }
-}
 
-// Toast notification function (keep this as is)
-function showEmailToast() {
-    const toast = document.createElement('div');
-    toast.className = 'email-toast';
-    toast.innerHTML = '<i class="fas fa-envelope"></i> Order confirmation sent to your email!';
-    document.body.appendChild(toast);
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 500);
-    }, 4000);
-}
-        // Toast notification function
         function showEmailToast() {
             const toast = document.createElement('div');
             toast.className = 'email-toast';
@@ -1823,10 +2130,10 @@ function showEmailToast() {
         function showEmailSupport() {
             document.getElementById('supportDetailArea').innerHTML = `
                 <div class="support-detail">
-                    <i class="fas fa-envelope" style="font-size: 2rem; color: #ff6f2f;"></i>
+                    <i class="fas fa-envelope" style="font-size: 2rem; color: #87CEEB;"></i>
                     <h3>Email Support</h3>
                     <p style="margin: 15px 0; font-size: 1.1rem;">Contact us at:</p>
-                    <p style="font-size: 1.3rem; font-weight: bold; color: #ff6f2f; word-break: break-all;">support@mizominute.com</p>
+                    <p style="font-size: 1.3rem; font-weight: bold; color: #87CEEB; word-break: break-all;">support@mizominute.com</p>
                     <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">We'll get back to you within 24 hours.</p>
                 </div>
             `;
@@ -1855,126 +2162,318 @@ function showEmailToast() {
             document.getElementById('signupName').value = '';
         }
 
+        // ========== GIFT ITEMS RENDER FUNCTION ==========
+        function renderGiftItems() {
+            const giftProducts = products.filter(p => p.tag === 'Gift');
+            const slideTrackGift = document.getElementById('slideTrackGift');
+            if (!slideTrackGift) return;
+            
+            slideTrackGift.innerHTML = '';
+            
+            giftProducts.forEach(product => {
+                // Initialize image index for this product if not exists
+                if (giftImageIndices[product.id] === undefined) {
+                    giftImageIndices[product.id] = 0;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'gift-card';
+                const currentImage = product.images[giftImageIndices[product.id]];
+                
+                card.innerHTML = `
+                    <span class="product-tag tag-gift">🎁 ${product.tag || 'Gift'}</span>
+                    <div class="gift-image-container">
+                        <img class="gift-image" src="${currentImage}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <button class="gift-nav-btn gift-prev" onclick="event.stopPropagation(); changeGiftImage(${product.id}, -1)"><i class="fas fa-chevron-left"></i></button>
+                        <button class="gift-nav-btn gift-next" onclick="event.stopPropagation(); changeGiftImage(${product.id}, 1)"><i class="fas fa-chevron-right"></i></button>
+                        <span class="image-counter">${giftImageIndices[product.id] + 1}/${product.images.length}</span>
+                    </div>
+                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                    <div class="price-add">
+                        <span class="price">${product.price}</span>
+                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                    </div>
+                `;
+                slideTrackGift.appendChild(card);
+            });
+        }
+
+        // ========== CHANGE GIFT IMAGE FUNCTION ==========
+        window.changeGiftImage = function(productId, direction) {
+            const product = products.find(p => p.id === productId);
+            if (!product || !product.images) return;
+            
+            let newIndex = giftImageIndices[productId] + direction;
+            if (newIndex < 0) newIndex = product.images.length - 1;
+            if (newIndex >= product.images.length) newIndex = 0;
+            
+            giftImageIndices[productId] = newIndex;
+            
+            // Find and update the specific gift card
+            const slideTrack = document.getElementById('slideTrackGift');
+            const cards = slideTrack.children;
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const img = card.querySelector('.gift-image');
+                if (img && img.getAttribute('onclick')?.includes(String(productId))) {
+                    img.src = product.images[newIndex];
+                    const counter = card.querySelector('.image-counter');
+                    if (counter) {
+                        counter.textContent = `${newIndex + 1}/${product.images.length}`;
+                    }
+                    break;
+                }
+            }
+        };
+
         // ========== RENDER PRODUCTS ==========
         function renderProducts(productsToRender = products) {
-            const snacksProducts = productsToRender.slice(0, 20);
-            const flowersProducts = productsToRender.slice(20, 40);
-            const lunchDinnerProducts = productsToRender.slice(40, 70);
-            const skincareProducts = productsToRender.slice(70, 90);
-            const electronicsProducts = productsToRender.slice(90, 130);
+            const mizominuteSpecialProducts = productsToRender.filter(p => p.tag === 'MizoMinute').slice(0, 20);
+            const snacksProducts = productsToRender.filter(p => p.tag === 'Snacks');
+            const drinksProducts = productsToRender.filter(p => p.tag === 'Drinks');
+            const frozenProducts = productsToRender.filter(p => p.tag === 'Frozen');
+            const lunchDinnerProducts = productsToRender.filter(p => p.tag === 'Meal');
+            const flowersProducts = productsToRender.filter(p => p.tag === 'Flowers');
+            const skincareProducts = productsToRender.filter(p => p.tag === 'Skincare');
+            const mizoProductProducts = productsToRender.filter(p => p.tag === 'Mizo Product');
+            const electronicsProducts = productsToRender.filter(p => p.tag === 'Electronics');
+            const tobaccoProducts = productsToRender.filter(p => p.tag === 'Tobacco');
             
+            // MizoMinute Special slider (TOP)
+            const slideTrack0 = document.getElementById('slideTrack0');
+            if (slideTrack0) {
+                slideTrack0.innerHTML = '';
+                mizominuteSpecialProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-mizominute">${product.tag || 'MizoMinute'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack0.appendChild(card);
+                });
+            }
+            
+            // Snacks slider
             const slideTrack1 = document.getElementById('slideTrack1');
-            slideTrack1.innerHTML = '';
-            snacksProducts.forEach(product => {
-                const tagText = product.tag || 'Snacks';
-                const card = document.createElement('div');
-                card.className = 'slide-card';
-                card.innerHTML = `
-                    <span class="product-tag tag-yellow">${tagText}</span>
-                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
-                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
-                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
-                    <div class="price-add">
-                        <span class="price">${product.price}</span>
-                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
-                    </div>
-                `;
-                slideTrack1.appendChild(card);
-            });
+            if (slideTrack1) {
+                slideTrack1.innerHTML = '';
+                snacksProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-yellow">${product.tag || 'Snacks'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack1.appendChild(card);
+                });
+            }
 
+            // Drinks slider
+            const slideTrack7 = document.getElementById('slideTrack7');
+            if (slideTrack7) {
+                slideTrack7.innerHTML = '';
+                drinksProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-drinks">${product.tag || 'Drinks'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack7.appendChild(card);
+                });
+            }
+
+            // Render Gift Items (NEW)
+            renderGiftItems();
+
+            // Frozen slider
+            const slideTrack8 = document.getElementById('slideTrack8');
+            if (slideTrack8) {
+                slideTrack8.innerHTML = '';
+                frozenProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-frozen">${product.tag || 'Frozen'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack8.appendChild(card);
+                });
+            }
+
+            // Flowers slider
             const slideTrack2 = document.getElementById('slideTrack2');
-            slideTrack2.innerHTML = '';
-            flowersProducts.forEach(product => {
-                const tagText = product.tag || 'Flowers';
-                const card = document.createElement('div');
-                card.className = 'slide-card';
-                card.innerHTML = `
-                    <span class="product-tag tag-blue">${tagText}</span>
-                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
-                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
-                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
-                    <div class="price-add">
-                        <span class="price">${product.price}</span>
-                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
-                    </div>
-                `;
-                slideTrack2.appendChild(card);
-            });
+            if (slideTrack2) {
+                slideTrack2.innerHTML = '';
+                flowersProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-blue">${product.tag || 'Flowers'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack2.appendChild(card);
+                });
+            }
 
+            // Lunch & Dinner slider
             const slideTrack3 = document.getElementById('slideTrack3');
-            slideTrack3.innerHTML = '';
-            lunchDinnerProducts.forEach(product => {
-                const tagText = product.tag || 'Meal';
-                const card = document.createElement('div');
-                card.className = 'slide-card';
-                card.innerHTML = `
-                    <span class="product-tag tag-green">${tagText}</span>
-                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
-                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
-                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
-                    <div class="price-add">
-                        <span class="price">${product.price}</span>
-                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
-                    </div>
-                `;
-                slideTrack3.appendChild(card);
-            });
+            if (slideTrack3) {
+                slideTrack3.innerHTML = '';
+                lunchDinnerProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-green">${product.tag || 'Meal'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack3.appendChild(card);
+                });
+            }
 
+            // Skincare slider
             const slideTrack4 = document.getElementById('slideTrack4');
-            slideTrack4.innerHTML = '';
-            skincareProducts.forEach(product => {
-                const tagText = product.tag || 'Skincare';
-                const card = document.createElement('div');
-                card.className = 'slide-card';
-                card.innerHTML = `
-                    <span class="product-tag tag-purple">${tagText}</span>
-                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
-                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
-                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
-                    <div class="price-add">
-                        <span class="price">${product.price}</span>
-                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
-                    </div>
-                `;
-                slideTrack4.appendChild(card);
-            });
+            if (slideTrack4) {
+                slideTrack4.innerHTML = '';
+                skincareProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-purple">${product.tag || 'Skincare'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack4.appendChild(card);
+                });
+            }
 
+            // Mizo Product slider
+            const slideTrack9 = document.getElementById('slideTrack9');
+            if (slideTrack9) {
+                slideTrack9.innerHTML = '';
+                mizoProductProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-mizo">${product.tag || 'Mizo Product'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack9.appendChild(card);
+                });
+            }
+
+            // Electronics slider
             const slideTrack5 = document.getElementById('slideTrack5');
-            slideTrack5.innerHTML = '';
-            electronicsProducts.forEach(product => {
-                const tagText = product.tag || 'Electronics';
-                const card = document.createElement('div');
-                card.className = 'slide-card';
-                card.innerHTML = `
-                    <span class="product-tag tag-red">${tagText}</span>
-                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
-                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
-                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
-                    <div class="price-add">
-                        <span class="price">${product.price}</span>
-                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
-                    </div>
-                `;
-                slideTrack5.appendChild(card);
-            });
+            if (slideTrack5) {
+                slideTrack5.innerHTML = '';
+                electronicsProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-red">${product.tag || 'Electronics'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack5.appendChild(card);
+                });
+            }
+
+            // TOBACCO slider - LAST SLIDE
+            const slideTrack6 = document.getElementById('slideTrack6');
+            if (slideTrack6) {
+                slideTrack6.innerHTML = '';
+                tobaccoProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'slide-card';
+                    card.innerHTML = `
+                        <span class="product-tag tag-tobacco">${product.tag || 'Tobacco'}</span>
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    slideTrack6.appendChild(card);
+                });
+            }
             
+            // PRODUCT GRID - remaining products (those not in any category or not yet displayed)
             const productGrid = document.getElementById('productGrid');
-            productGrid.innerHTML = '';
-            const remainingProducts = productsToRender.slice(130);
-            remainingProducts.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
-                    <div style="font-weight:600; margin:5px 0;">${product.name}</div>
-                    <div style="font-size:0.8rem; color:#666;">${product.description}</div>
-                    <div class="price-add">
-                        <span class="price">${product.price}</span>
-                        <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
-                    </div>
-                `;
-                productGrid.appendChild(card);
-            });
+            if (productGrid) {
+                productGrid.innerHTML = '';
+                const displayedCategories = ['MizoMinute', 'Snacks', 'Drinks', 'Gift', 'Frozen', 'Meal', 'Flowers', 'Skincare', 'Mizo Product', 'Electronics', 'Tobacco'];
+                const remainingProducts = productsToRender.filter(p => !displayedCategories.includes(p.tag));
+                remainingProducts.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                        <img class="product-img" src="${product.image}" onclick="openImageModal(${product.id})" onerror="this.src='https://via.placeholder.com/140'">
+                        <div style="font-weight:600; margin:5px 0;">${product.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${product.description}</div>
+                        <div class="price-add">
+                            <span class="price">${product.price}</span>
+                            <button class="add-btn" onclick="addToCart(${product.id})">ADD</button>
+                        </div>
+                    `;
+                    productGrid.appendChild(card);
+                });
+            }
         }
 
         window.searchProducts = function() {
@@ -1996,36 +2495,29 @@ function showEmailToast() {
             }
         });
 
-        // Slider navigation for all 5 sliders
-        document.getElementById('slideLeft1').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper1').scrollBy({ left: -300, behavior: 'smooth' });
-        });
-        document.getElementById('slideRight1').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper1').scrollBy({ left: 300, behavior: 'smooth' });
-        });
-        document.getElementById('slideLeft2').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper2').scrollBy({ left: -300, behavior: 'smooth' });
-        });
-        document.getElementById('slideRight2').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper2').scrollBy({ left: 300, behavior: 'smooth' });
-        });
-        document.getElementById('slideLeft3').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper3').scrollBy({ left: -300, behavior: 'smooth' });
-        });
-        document.getElementById('slideRight3').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper3').scrollBy({ left: 300, behavior: 'smooth' });
-        });
-        document.getElementById('slideLeft4').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper4').scrollBy({ left: -300, behavior: 'smooth' });
-        });
-        document.getElementById('slideRight4').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper4').scrollBy({ left: 300, behavior: 'smooth' });
-        });
-        document.getElementById('slideLeft5').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper5').scrollBy({ left: -300, behavior: 'smooth' });
-        });
-        document.getElementById('slideRight5').addEventListener('click', () => {
-            document.getElementById('slideTrackWrapper5').scrollBy({ left: 300, behavior: 'smooth' });
+        // Slider navigation for all sliders including Gift
+        const sliders = [
+            { left: 'slideLeft0', right: 'slideRight0', wrapper: 'slideTrackWrapper0' },
+            { left: 'slideLeft1', right: 'slideRight1', wrapper: 'slideTrackWrapper1' },
+            { left: 'slideLeft2', right: 'slideRight2', wrapper: 'slideTrackWrapper2' },
+            { left: 'slideLeft3', right: 'slideRight3', wrapper: 'slideTrackWrapper3' },
+            { left: 'slideLeft4', right: 'slideRight4', wrapper: 'slideTrackWrapper4' },
+            { left: 'slideLeft5', right: 'slideRight5', wrapper: 'slideTrackWrapper5' },
+            { left: 'slideLeft6', right: 'slideRight6', wrapper: 'slideTrackWrapper6' },
+            { left: 'slideLeft7', right: 'slideRight7', wrapper: 'slideTrackWrapper7' },
+            { left: 'slideLeft8', right: 'slideRight8', wrapper: 'slideTrackWrapper8' },
+            { left: 'slideLeft9', right: 'slideRight9', wrapper: 'slideTrackWrapper9' },
+            { left: 'slideLeftGift', right: 'slideRightGift', wrapper: 'slideTrackWrapperGift' }
+        ];
+        
+        sliders.forEach(slider => {
+            const leftBtn = document.getElementById(slider.left);
+            const rightBtn = document.getElementById(slider.right);
+            const wrapper = document.getElementById(slider.wrapper);
+            if (leftBtn && rightBtn && wrapper) {
+                leftBtn.addEventListener('click', () => wrapper.scrollBy({ left: -300, behavior: 'smooth' }));
+                rightBtn.addEventListener('click', () => wrapper.scrollBy({ left: 300, behavior: 'smooth' }));
+            }
         });
 
         // ========== CART FUNCTIONS ==========
@@ -2041,7 +2533,7 @@ function showEmailToast() {
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    image: product.image,
+                    image: product.images ? product.images[0] : product.image,
                     quantity: 1
                 });
             }
@@ -2179,7 +2671,8 @@ function showEmailToast() {
             if (!product) return;
             
             currentProductId = productId;
-            document.getElementById('modalProductImage').src = product.image;
+            const imageToShow = product.images ? product.images[giftImageIndices[productId] || 0] : product.image;
+            document.getElementById('modalProductImage').src = imageToShow;
             document.getElementById('imageModal').classList.add('show');
             document.getElementById('backdrop').classList.add('show');
             document.getElementById('commentText').value = '';
@@ -2188,7 +2681,7 @@ function showEmailToast() {
 
         window.closeImageModal = function() {
             document.getElementById('imageModal').classList.remove('show');
-            document.getElementById('backdrop').classList.remove('show');
+            document.getElementById('backdrop').classlist.remove('show');
             currentProductId = null;
         };
 
@@ -2373,7 +2866,7 @@ function showEmailToast() {
             const orderDetailsList = document.getElementById('orderDetailsList');
             
             if (snapshot.empty) {
-                orderDetailsList.innerHTML = `<div style="text-align: center; padding: 40px;"><i class="fas fa-box-open" style="font-size: 48px; color: #ff6f2f;"></i><p>No orders found.</p></div>`;
+                orderDetailsList.innerHTML = `<div style="text-align: center; padding: 40px;"><i class="fas fa-box-open" style="font-size: 48px; color: #87CEEB;"></i><p>No orders found.</p></div>`;
                 return;
             }
             
@@ -2389,7 +2882,7 @@ function showEmailToast() {
                 ordersHtml += `
                     <div class="order-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                            <h3 style="color: #ff6f2f;">Order #${orderId}</h3>
+                            <h3 style="color: #87CEEB;">Order #${orderId}</h3>
                             <span class="status-badge ${statusDisplay.class}">${statusDisplay.icon} ${statusDisplay.text}</span>
                         </div>
                         <div style="font-size: 13px; color: #666; margin: 10px 0;"><i class="far fa-calendar-alt"></i> ${orderDate}</div>
@@ -2399,7 +2892,7 @@ function showEmailToast() {
                 order.items.forEach(item => {
                     ordersHtml += `<div class="order-item-row"><span>${item.name} × ${item.quantity}</span><span>₹${item.subtotal}</span></div>`;
                 });
-                ordersHtml += `<div class="order-detail-line" style="font-weight: bold; border-top: 2px solid #ff6f2f; margin-top: 10px; padding-top: 10px;"><span>Grand Total:</span><span>₹${order.grandTotal}</span></div></div>`;
+                ordersHtml += `<div class="order-detail-line" style="font-weight: bold; border-top: 2px solid #87CEEB; margin-top: 10px; padding-top: 10px;"><span>Grand Total:</span><span>₹${order.grandTotal}</span></div></div>`;
             });
             orderDetailsList.innerHTML = ordersHtml;
         }
@@ -2407,10 +2900,10 @@ function showEmailToast() {
         function displayTrackingOnly(snapshot) {
             const orderDetailsList = document.getElementById('orderDetailsList');
             if (snapshot.empty) {
-                orderDetailsList.innerHTML = `<div style="text-align:center; padding:40px;"><i class="fas fa-truck" style="font-size:48px; color:#ff6f2f;"></i><p>No orders to track.</p></div>`;
+                orderDetailsList.innerHTML = `<div style="text-align:center; padding:40px;"><i class="fas fa-truck" style="font-size:48px; color:#87CEEB;"></i><p>No orders to track.</p></div>`;
                 return;
             }
-            let ordersHtml = '<div class="tracking-header"><h2 style="color:#ff6f2f;">📦 Track Your Orders</h2></div>';
+            let ordersHtml = '<div class="tracking-header"><h2 style="color:#87CEEB;">📦 Track Your Orders</h2></div>';
             snapshot.forEach((doc) => {
                 const order = doc.data();
                 const orderId = doc.id.slice(-8).toUpperCase();
@@ -2418,7 +2911,7 @@ function showEmailToast() {
                 const status = order.status || 'pending';
                 const statusDisplay = getStatusDisplay(status);
                 const deliveryTime = order.deliveryTime || '';
-                ordersHtml += `<div class="order-card"><div style="display:flex; justify-content:space-between;"><h3 style="color:#ff6f2f;">Order #${orderId}</h3><span class="status-badge ${statusDisplay.class}">${statusDisplay.icon} ${statusDisplay.text}</span></div><div style="font-size:13px; margin:10px 0;">${orderDate}</div>${deliveryTime ? `<div class="delivery-time-badge">${deliveryTime}</div>` : ''}${getTrackingTimeline(order)}</div>`;
+                ordersHtml += `<div class="order-card"><div style="display:flex; justify-content:space-between;"><h3 style="color:#87CEEB;">Order #${orderId}</h3><span class="status-badge ${statusDisplay.class}">${statusDisplay.icon} ${statusDisplay.text}</span></div><div style="font-size:13px; margin:10px 0;">${orderDate}</div>${deliveryTime ? `<div class="delivery-time-badge">${deliveryTime}</div>` : ''}${getTrackingTimeline(order)}</div>`;
             });
             orderDetailsList.innerHTML = ordersHtml;
         }
@@ -2629,10 +3122,6 @@ function showEmailToast() {
             document.getElementById('cartSidebar').classList.remove('open');
         };
 
-        // ===============================================
-        // 📧 UPDATED PLACE ORDER FUNCTION WITH TRANSACTIONAL EMAILS
-        // ✅ REPLACES EMAILJS WITH BACKEND NODEMAILER
-        // ===============================================
         window.placeOrder = async function() {
             if (!loggedInUser) { 
                 alert('Please login first'); 
@@ -2693,23 +3182,17 @@ function showEmailToast() {
                     createdAt: new Date().toISOString()
                 };
                 
-                // Save order to Firestore
                 const orderRef = await db.collection('orders').add(orderData);
                 const orderId = orderRef.id.slice(-8).toUpperCase();
                 
-                // ===============================================
-                // 📧 SEND TRANSACTIONAL EMAILS VIA BACKEND API
-                // ===============================================
                 await sendOrderConfirmationEmails(orderData, orderId);
                 
-                // Clear cart and show success
                 cart = [];
                 updateCartUI();
                 closeCheckoutModal();
                 document.getElementById('successModal').classList.add('show');
                 document.getElementById('backdrop').classList.add('show');
                 
-                // Update success message with email confirmation
                 const successSubMsg = document.querySelector('.success-submessage');
                 if (successSubMsg) {
                     successSubMsg.innerHTML = `A confirmation email has been sent to ${email}<br>Order #${orderId}`;
@@ -2746,7 +3229,6 @@ function showEmailToast() {
         document.getElementById('adminTriggerArea').addEventListener('dblclick',()=>openAdminLogin());
         document.addEventListener('keydown',(e)=>{ if(e.ctrlKey&&e.shiftKey&&e.key==='A'){ e.preventDefault(); openAdminLogin(); } });
         
-        // ========== ADMIN PAGE ACCESS VIA /admin URL ==========
         if (window.location.pathname === '/admin' || window.location.pathname.endsWith('/admin') || window.location.hash === '#admin') {
             setTimeout(() => {
                 openAdminLogin();
